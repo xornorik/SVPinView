@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -41,7 +40,6 @@
                             <constraint firstAttribute="bottom" secondItem="IyR-2y-k2j" secondAttribute="bottom" id="GTc-VQ-7ZK"/>
                             <constraint firstItem="3uN-C8-dyg" firstAttribute="leading" secondItem="GTy-zr-AYb" secondAttribute="leading" id="InD-Jg-dlm"/>
                             <constraint firstAttribute="trailing" secondItem="3uN-C8-dyg" secondAttribute="trailing" id="KRe-Ea-jBu"/>
-                            <constraint firstAttribute="width" secondItem="GTy-zr-AYb" secondAttribute="height" multiplier="1:1" id="NkK-9k-Jhf"/>
                             <constraint firstItem="IyR-2y-k2j" firstAttribute="leading" secondItem="GTy-zr-AYb" secondAttribute="leading" id="SRS-X3-96x"/>
                             <constraint firstItem="3uN-C8-dyg" firstAttribute="top" secondItem="GTy-zr-AYb" secondAttribute="top" id="eLg-GH-zx1"/>
                             <constraint firstAttribute="trailing" secondItem="IyR-2y-k2j" secondAttribute="trailing" id="qma-1l-ag8"/>
@@ -50,9 +48,10 @@
                 </subviews>
             </view>
             <constraints>
+                <constraint firstItem="GTy-zr-AYb" firstAttribute="top" secondItem="mzP-0M-CaZ" secondAttribute="top" id="92W-Xp-xEa"/>
                 <constraint firstAttribute="trailing" secondItem="GTy-zr-AYb" secondAttribute="trailing" id="QEz-GF-wuV"/>
+                <constraint firstAttribute="bottom" secondItem="GTy-zr-AYb" secondAttribute="bottom" id="UFi-Zb-Rk5"/>
                 <constraint firstItem="GTy-zr-AYb" firstAttribute="leading" secondItem="mzP-0M-CaZ" secondAttribute="leading" id="rkk-1R-rPh"/>
-                <constraint firstItem="GTy-zr-AYb" firstAttribute="centerY" secondItem="mzP-0M-CaZ" secondAttribute="centerY" id="yOq-AD-Hsl"/>
             </constraints>
             <point key="canvasLocation" x="38" y="57"/>
         </collectionViewCell>

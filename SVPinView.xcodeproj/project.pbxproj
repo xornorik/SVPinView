@@ -50,13 +50,29 @@
 		ACE199C0204556340041203C /* SVPinView */ = {
 			isa = PBXGroup;
 			children = (
-				ACE199C92045566E0041203C /* SVPinCell.xib */,
-				ACE199CA2045566E0041203C /* SVPinView.swift */,
-				ACE199CB2045566E0041203C /* SVPinView.xib */,
+				ACE199CD204584680041203C /* Classes */,
+				ACE199CE204584930041203C /* XIB's */,
 				ACE199C1204556340041203C /* SVPinView.h */,
 				ACE199C2204556340041203C /* Info.plist */,
 			);
 			path = SVPinView;
+			sourceTree = "<group>";
+		};
+		ACE199CD204584680041203C /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				ACE199CA2045566E0041203C /* SVPinView.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		ACE199CE204584930041203C /* XIB's */ = {
+			isa = PBXGroup;
+			children = (
+				ACE199C92045566E0041203C /* SVPinCell.xib */,
+				ACE199CB2045566E0041203C /* SVPinView.xib */,
+			);
+			path = "XIB's";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

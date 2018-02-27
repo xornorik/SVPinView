@@ -23,16 +23,17 @@ public class SVPinView: UIView {
     @IBInspectable public var textColor:UIColor = UIColor.black
     @IBInspectable public var underlineColor:UIColor = UIColor.black
     @IBInspectable public var underLineThickness:CGFloat = 2
-    @IBInspectable public var font:UIFont = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.regular)
-    @IBInspectable public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
-    @IBInspectable public var pinIinputAccessoryView:UIView = UIView()
-    @IBInspectable public var shouldSecureText = true
+    @IBInspectable public var shouldSecureText:Bool = true
+    
+    public var font:UIFont = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.regular)
+    public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
+    public var pinIinputAccessoryView:UIView = UIView()
     
     var password = [String]()
     public var didFinishCallback: ((String)->())?
     
     var view:UIView!
-    var reuseIdentifier = "MCPinCell"
+    var reuseIdentifier = "SVPinCell"
     var isResetting = false
 
     required public init?(coder aDecoder: NSCoder) {
@@ -186,7 +187,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.width - (interSpace * CGFloat(max(pinLength, 1) - 1)))/CGFloat(pinLength)
-        return CGSize(width: width, height: width)
+        return CGSize(width: width, height: collectionView.bounds.height)
     }
         
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
