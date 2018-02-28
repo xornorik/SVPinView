@@ -92,7 +92,7 @@ public class SVPinView: UIView {
             // Found next responder, so set it.
             nextResponder?.becomeFirstResponder()
         } else {
-            // Not found, so remove keyboard
+            // Not found, so dismiss keyboard
             textField.resignFirstResponder()
         }
         
@@ -192,6 +192,10 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return interSpace
+    }
+    
+    public override func layoutSubviews() {
+        flowLayout.invalidateLayout()
     }
 }
 extension SVPinView : UITextFieldDelegate

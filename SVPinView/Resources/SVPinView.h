@@ -2,8 +2,8 @@
 //  SVPinView.h
 //  SVPinView
 //
-//  Created by Srinivas on 27/02/18.
-//  Copyright © 2018 Srinivas. All rights reserved.
+//  Created by Srinivas Vemuri on 27/02/18.
+//  Copyright © 2018 Srinivas Vemuri. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

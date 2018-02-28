@@ -7,11 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ACC5DC0020469FEB00FA8CD7 /* SVPinView.gif in Resources */ = {isa = PBXBuildFile; fileRef = ACC5DBFF20469FEB00FA8CD7 /* SVPinView.gif */; };
+		ACC5DC022046A0F300FA8CD7 /* PinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC5DC012046A0F300FA8CD7 /* PinViewController.swift */; };
+		ACC5DC042046A2A400FA8CD7 /* IBInspectables.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC5DC032046A2A400FA8CD7 /* IBInspectables.png */; };
 		ACE199C3204556340041203C /* SVPinView.h in Headers */ = {isa = PBXBuildFile; fileRef = ACE199C1204556340041203C /* SVPinView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ACE199CC2045566E0041203C /* SVPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE199CA2045566E0041203C /* SVPinView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ACC5DBFF20469FEB00FA8CD7 /* SVPinView.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SVPinView.gif; sourceTree = "<group>"; };
+		ACC5DC012046A0F300FA8CD7 /* PinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinViewController.swift; sourceTree = "<group>"; };
+		ACC5DC032046A2A400FA8CD7 /* IBInspectables.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBInspectables.png; sourceTree = "<group>"; };
 		ACE199BE204556340041203C /* SVPinView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SVPinView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACE199C1204556340041203C /* SVPinView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVPinView.h; sourceTree = "<group>"; };
 		ACE199C2204556340041203C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -31,6 +37,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		ACC5DBE4204689E000FA8CD7 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				ACE199CD204584680041203C /* Classes */,
+				ACE199CE204584930041203C /* XIB's */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		ACC5DBE520468A2000FA8CD7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ACE199C1204556340041203C /* SVPinView.h */,
+				ACE199C2204556340041203C /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		ACC5DBFD20469FC100FA8CD7 /* Screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				ACC5DBFF20469FEB00FA8CD7 /* SVPinView.gif */,
+				ACC5DC032046A2A400FA8CD7 /* IBInspectables.png */,
+			);
+			path = Screenshots;
+			sourceTree = "<group>";
+		};
+		ACC5DBFE20469FCA00FA8CD7 /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				ACC5DC012046A0F300FA8CD7 /* PinViewController.swift */,
+			);
+			path = Example;
+			sourceTree = "<group>";
+		};
 		ACE199B4204556340041203C = {
 			isa = PBXGroup;
 			children = (
@@ -50,10 +91,10 @@
 		ACE199C0204556340041203C /* SVPinView */ = {
 			isa = PBXGroup;
 			children = (
-				ACE199CD204584680041203C /* Classes */,
-				ACE199CE204584930041203C /* XIB's */,
-				ACE199C1204556340041203C /* SVPinView.h */,
-				ACE199C2204556340041203C /* Info.plist */,
+				ACC5DBFE20469FCA00FA8CD7 /* Example */,
+				ACC5DBFD20469FC100FA8CD7 /* Screenshots */,
+				ACC5DBE4204689E000FA8CD7 /* Source */,
+				ACC5DBE520468A2000FA8CD7 /* Resources */,
 			);
 			path = SVPinView;
 			sourceTree = "<group>";
@@ -113,6 +154,7 @@
 		ACE199B5204556340041203C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = Srinivas;
 				TargetAttributes = {
@@ -128,6 +170,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = ACE199B4204556340041203C;
 			productRefGroup = ACE199BF204556340041203C /* Products */;
@@ -144,6 +187,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACC5DC042046A2A400FA8CD7 /* IBInspectables.png in Resources */,
+				ACC5DC0020469FEB00FA8CD7 /* SVPinView.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACC5DC022046A0F300FA8CD7 /* PinViewController.swift in Sources */,
 				ACE199CC2045566E0041203C /* SVPinView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
