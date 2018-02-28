@@ -22,7 +22,7 @@ An [example ViewController](https://github.com/xornorik/SVPinView/blob/master/SV
 Add the following line to your Podfile:
 
 ```ruby
-pod 'SVPinView'
+pod 'SVPinView', '~> 1.0.1'
 ```
 
 Then run the following in the same directory as your Podfile:
