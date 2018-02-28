@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SVPinView
 
 class PinViewController: UIViewController {
     
@@ -17,7 +16,11 @@ class PinViewController: UIViewController {
         super.viewDidLoad()
         self.title = "SVPinView"
         
-        //Configure Pin View
+        configurePinView()
+    }
+    
+    func configurePinView() {
+        
         pinView.pinLength = 5
         pinView.secureCharacter = "\u{25CF}"
         pinView.interSpace = 5
@@ -25,6 +28,10 @@ class PinViewController: UIViewController {
         pinView.underlineColor = UIColor.black
         pinView.underLineThickness = 2
         pinView.shouldSecureText = true
+        
+        pinView.font = UIFont.systemFont(ofSize: 15)
+        pinView.keyboardType = .phonePad
+        pinView.pinIinputAccessoryView = UIView()
         
         pinView.didFinishCallback = didFinishEnteringPin(pin:)
     }

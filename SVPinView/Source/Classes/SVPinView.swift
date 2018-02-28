@@ -25,7 +25,7 @@ public class SVPinView: UIView {
     @IBInspectable public var underLineThickness:CGFloat = 2
     @IBInspectable public var shouldSecureText:Bool = true
     
-    public var font:UIFont = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.regular)
+    public var font:UIFont = UIFont.systemFont(ofSize: 15)
     public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
     public var pinIinputAccessoryView:UIView = UIView()
     
