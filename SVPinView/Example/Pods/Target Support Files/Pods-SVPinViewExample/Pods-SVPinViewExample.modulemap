@@ -1,0 +1,6 @@
+framework module Pods_SVPinViewExample {
+  umbrella header "Pods-SVPinViewExample-umbrella.h"
+
+  export *
+  module * { export * }
+}
