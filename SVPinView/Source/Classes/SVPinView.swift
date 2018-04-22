@@ -18,9 +18,9 @@ public enum SVPinViewStyle : Int {
 @objc
 public class SVPinView: UIView {
     
-    @IBOutlet private var collectionView : UICollectionView!
+    @IBOutlet fileprivate var collectionView : UICollectionView!
     
-    private var flowLayout: UICollectionViewFlowLayout {
+    fileprivate var flowLayout: UICollectionViewFlowLayout {
         return self.collectionView?.collectionViewLayout as! UICollectionViewFlowLayout
     }
     
@@ -39,12 +39,12 @@ public class SVPinView: UIView {
     public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
     public var pinIinputAccessoryView:UIView = UIView()
     
-    private var password = [String]()
+    fileprivate var password = [String]()
     public var didFinishCallback: ((String)->())?
     
-    private var view:UIView!
-    private var reuseIdentifier = "SVPinCell"
-    private var isResetting = false
+    fileprivate var view:UIView!
+    fileprivate var reuseIdentifier = "SVPinCell"
+    fileprivate var isResetting = false
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -67,7 +67,7 @@ public class SVPinView: UIView {
         view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
     }
     
-    @objc private func textFieldDidChange(_ textField: UITextField) {
+    @objc fileprivate func textFieldDidChange(_ textField: UITextField) {
         var nextTag = textField.tag
         let index = nextTag - 100
         
