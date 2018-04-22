@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Pin View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="PinViewController" customModule="SVPinViewExample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O96-Bq-RdG" customClass="SVPinView" customModule="SVPinView">
+                                <rect key="frame" x="8" y="151" width="359" height="80"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="Mp3-x8-33O"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter your pin number." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h5A-dA-yto">
+                                <rect key="frame" x="70.5" y="100.5" width="233.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="HQD-oC-cdb">
+                                <rect key="frame" x="50" y="281" width="275" height="30"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xpc-Vf-TKF">
+                                        <rect key="frame" x="0.0" y="0.0" width="79" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hF4-Lc-YYK">
+                                                <rect key="frame" x="0.0" y="0.0" width="79" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
+                                                <state key="normal" title="  Show Pin  ">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="printPin" destination="BYZ-38-t0r" eventType="touchUpInside" id="79A-ZQ-zf7"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="hF4-Lc-YYK" firstAttribute="top" secondItem="xpc-Vf-TKF" secondAttribute="top" id="FlB-9a-PNc"/>
+                                            <constraint firstAttribute="bottom" secondItem="hF4-Lc-YYK" secondAttribute="bottom" id="fs7-y4-34a"/>
+                                            <constraint firstAttribute="trailing" secondItem="hF4-Lc-YYK" secondAttribute="trailing" id="h1E-P3-GJK"/>
+                                            <constraint firstItem="hF4-Lc-YYK" firstAttribute="leading" secondItem="xpc-Vf-TKF" secondAttribute="leading" id="oOb-pV-9Np"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KiT-hR-xJu">
+                                        <rect key="frame" x="87.5" y="0.0" width="78" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mUi-vH-wCN">
+                                                <rect key="frame" x="0.0" y="0.0" width="78" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
+                                                <state key="normal" title="  Clear Pin  ">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="clearPin" destination="BYZ-38-t0r" eventType="touchUpInside" id="fS7-pj-Dwl"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="mUi-vH-wCN" secondAttribute="trailing" id="LHw-H4-CkO"/>
+                                            <constraint firstAttribute="bottom" secondItem="mUi-vH-wCN" secondAttribute="bottom" id="OQv-Jg-7D8"/>
+                                            <constraint firstItem="mUi-vH-wCN" firstAttribute="top" secondItem="KiT-hR-xJu" secondAttribute="top" id="etj-NB-CK9"/>
+                                            <constraint firstItem="mUi-vH-wCN" firstAttribute="leading" secondItem="KiT-hR-xJu" secondAttribute="leading" id="wCG-b5-glH"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uzX-hv-TBG">
+                                        <rect key="frame" x="174" y="0.0" width="101" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rFE-I6-dFK">
+                                                <rect key="frame" x="0.0" y="0.0" width="101" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="0.29984482020547948" colorSpace="calibratedWhite"/>
+                                                <state key="normal" title="  Toggle Style  ">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="toggleStyle" destination="BYZ-38-t0r" eventType="touchUpInside" id="DSL-2u-S9O"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="rFE-I6-dFK" secondAttribute="bottom" id="4QW-UW-Jhx"/>
+                                            <constraint firstItem="rFE-I6-dFK" firstAttribute="top" secondItem="uzX-hv-TBG" secondAttribute="top" id="6AW-of-GqM"/>
+                                            <constraint firstAttribute="trailing" secondItem="rFE-I6-dFK" secondAttribute="trailing" id="Djb-DQ-q4v"/>
+                                            <constraint firstItem="rFE-I6-dFK" firstAttribute="leading" secondItem="uzX-hv-TBG" secondAttribute="leading" id="QdR-TY-aqD"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="efM-EP-VzY">
+                                <rect key="frame" x="106.5" y="341" width="161" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="0.29984482019999997" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="  Paste from Clipboard  ">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pastePin" destination="BYZ-38-t0r" eventType="touchUpInside" id="CgD-HW-jSj"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SVPinView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TnQ-7W-wBd">
+                                <rect key="frame" x="145" y="40" width="85.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.4648166232638889" green="0.36143663194444442" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="HQD-oC-cdb" firstAttribute="top" secondItem="O96-Bq-RdG" secondAttribute="bottom" constant="50" id="0CT-f0-eQU"/>
+                            <constraint firstItem="efM-EP-VzY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6WJ-sn-JrJ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="HQD-oC-cdb" secondAttribute="trailing" constant="50" id="7Yy-P0-Xhs"/>
+                            <constraint firstItem="TnQ-7W-wBd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8ox-7i-qXu"/>
+                            <constraint firstItem="HQD-oC-cdb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="AuA-5F-b16"/>
+                            <constraint firstAttribute="trailing" secondItem="O96-Bq-RdG" secondAttribute="trailing" constant="8" id="I5U-Pt-qWF"/>
+                            <constraint firstItem="TnQ-7W-wBd" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="Nmk-Tg-Trs"/>
+                            <constraint firstItem="O96-Bq-RdG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="OIL-Bl-z2s"/>
+                            <constraint firstItem="h5A-dA-yto" firstAttribute="top" secondItem="TnQ-7W-wBd" secondAttribute="bottom" constant="40" id="Ud9-yj-kO7"/>
+                            <constraint firstItem="efM-EP-VzY" firstAttribute="top" secondItem="HQD-oC-cdb" secondAttribute="bottom" constant="30" id="YcK-Cl-xNu"/>
+                            <constraint firstItem="O96-Bq-RdG" firstAttribute="top" secondItem="h5A-dA-yto" secondAttribute="bottom" constant="30" id="e2L-qZ-LpM"/>
+                            <constraint firstItem="h5A-dA-yto" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="eeH-dM-Cg9"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ss4-NK-otV"/>
+                    <connections>
+                        <outlet property="pinView" destination="O96-Bq-RdG" id="SDc-2b-hVh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="448.80000000000001" y="44.527736131934034"/>
+        </scene>
+    </scenes>
+</document>
