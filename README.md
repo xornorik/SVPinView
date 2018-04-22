@@ -57,9 +57,9 @@ pinView.pinIinputAccessoryView = UIView()
 #### Styles
 ```swift
 enum SVPinViewStyle : Int {
-case none = 0
-case underline
-case box
+  case none = 0
+  case underline
+  case box
 }
 ```
 There are two inbuilt styes; `underline` & `box`. However, the *fieldBackgroundColor* & *fieldCornerRadius* properties can be used to create custom styles.
@@ -80,7 +80,7 @@ SVPinView has a *didFinish* callback, which gets executed after the pin has been
 
 ```swift
 pinView.didFinishCallback = { pin in
-print("The pin entered is \(pin)")
+  print("The pin entered is \(pin)")
 }
 ```
 
