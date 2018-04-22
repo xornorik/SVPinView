@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SVPinView"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "SVPinView is a customisable library used for accepting alphanumeric pins or one-time passwords."
 
   s.homepage     = "https://github.com/xornorik/SVPinView"
@@ -16,10 +16,8 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "9.0"
 
   s.source       = { :git => "https://github.com/xornorik/SVPinView.git", :tag => "#{s.version}" }
-  s.source_files = "SVPinView/**/*.{swift}"
+  s.source_files = "SVPinView/Source/**/*.{swift}"
 
-  s.resources = "SVPinView/**/*.{png,jpeg,jpg,storyboard,xib,xcassets`}"
-
-  # s.dependency "JSONKit", "~> 1.4"
+  s.resources = "SVPinView/Source/**/*.{png,jpeg,jpg,storyboard,xib,xcassets`}"
 
 end

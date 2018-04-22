@@ -9,11 +9,18 @@
 import UIKit
 
 @objc
+public enum SVPinViewStyle : Int {
+    case none = 0
+    case underline
+    case box
+}
+
+@objc
 public class SVPinView: UIView {
     
-    @IBOutlet var collectionView : UICollectionView!
+    @IBOutlet private var collectionView : UICollectionView!
     
-    var flowLayout: UICollectionViewFlowLayout {
+    private var flowLayout: UICollectionViewFlowLayout {
         return self.collectionView?.collectionViewLayout as! UICollectionViewFlowLayout
     }
     
@@ -21,27 +28,30 @@ public class SVPinView: UIView {
     @IBInspectable public var secureCharacter:String = "\u{25CF}"
     @IBInspectable public var interSpace:CGFloat = 5
     @IBInspectable public var textColor:UIColor = UIColor.black
-    @IBInspectable public var underlineColor:UIColor = UIColor.black
-    @IBInspectable public var underLineThickness:CGFloat = 2
+    @IBInspectable public var borderLineColor:UIColor = UIColor.black
+    @IBInspectable public var borderLineThickness:CGFloat = 2
     @IBInspectable public var shouldSecureText:Bool = true
+    @IBInspectable public var fieldBackgroundColor:UIColor = UIColor.clear
+    @IBInspectable public var fieldCornerRadius:CGFloat = 0
+    public var style:SVPinViewStyle = .underline
     
     public var font:UIFont = UIFont.systemFont(ofSize: 15)
     public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
     public var pinIinputAccessoryView:UIView = UIView()
     
-    var password = [String]()
+    private var password = [String]()
     public var didFinishCallback: ((String)->())?
     
-    var view:UIView!
-    var reuseIdentifier = "SVPinCell"
-    var isResetting = false
+    private var view:UIView!
+    private var reuseIdentifier = "SVPinCell"
+    private var isResetting = false
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         loadView()
     }
     
-    func loadView() {
+    private func loadView() {
         let podBundle = Bundle(for: SVPinView.self)
         let nib = UINib(nibName: "SVPinView", bundle: podBundle)
         view = nib.instantiate(withOwner: self, options: nil)[0] as! UIView
@@ -57,7 +67,7 @@ public class SVPinView: UIView {
         view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    @objc private func textFieldDidChange(_ textField: UITextField) {
         var nextTag = textField.tag
         let index = nextTag - 100
         
@@ -121,6 +131,15 @@ public class SVPinView: UIView {
         validateAndSendCallback()
     }
     
+    private func validateAndSendCallback() {
+        let pin = getPin()
+        guard !pin.isEmpty else {return}
+        if didFinishCallback != nil {
+            didFinishCallback!(pin)
+        }
+    }
+    
+    //MARK: Public methods
     @objc
     public func getPin() -> String {
         guard password.count == pinLength && password.joined().trimmingCharacters(in: CharacterSet(charactersIn: " ")).count == pinLength else {
@@ -137,11 +156,30 @@ public class SVPinView: UIView {
         self.collectionView.reloadData()
     }
     
-    func validateAndSendCallback() {
-        let pin = getPin()
-        guard !pin.isEmpty else {return}
-        if didFinishCallback != nil {
-            didFinishCallback!(pin)
+    @objc
+    public func pastePin(pin:String) {
+        
+        password = []
+        for (index,char) in pin.enumerated() {
+            
+            guard index < pinLength else {return}
+            
+            //Get the first textField
+            let textField = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(101 + index) as! SVPinField
+            textField.text = String(char)
+            
+            //secure text after a bit
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+                if textField.text == "" {
+                    textField.text = " "
+                } else {
+                    if self.shouldSecureText {textField.text = self.secureCharacter} else {}
+                }
+            })
+            
+            //store text
+            password.append(String(char))
+            validateAndSendCallback()
         }
     }
 }
@@ -155,11 +193,12 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         
         //The tag of the last cell of the pinView is (100 + (pinLength - indexPath.row))
-        let textField = isResetting ? (cell.viewWithTag(100 + (pinLength - indexPath.row)) as! UITextField) : (cell.viewWithTag(100) as! UITextField)
+        let textField = isResetting ? (cell.viewWithTag(100 + (pinLength - indexPath.row)) as! SVPinField) : (cell.viewWithTag(100) as! SVPinField)
+        let containerView = cell.viewWithTag(51)!
         let underLine = cell.viewWithTag(50)!
 
         //Setting up textField
-        textField.tag = 101 + indexPath.row //textField.tag += (indexPath.row + 1)
+        textField.tag = 101 + indexPath.row
         textField.text = " "
         textField.isSecureTextEntry = false
         textField.textColor = self.textColor
@@ -171,11 +210,30 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
-        //underLine Setup
-        underLine.backgroundColor = underlineColor
-        underLine.constraints.filter { (constraint) -> Bool in
-            return constraint.identifier == "underlineHeight"
-        }.first?.constant = underLineThickness
+        containerView.backgroundColor = fieldBackgroundColor
+        containerView.layer.cornerRadius = fieldCornerRadius
+        
+        func setupUnderline(color:UIColor, withThickness thickness:CGFloat) {
+            underLine.backgroundColor = color
+            underLine.constraints.filter { (constraint) -> Bool in
+                return constraint.identifier == "underlineHeight"
+                }.first?.constant = thickness
+        }
+        
+        switch style {
+        case .none:
+            setupUnderline(color: UIColor.clear, withThickness: 0)
+            containerView.layer.borderWidth = 0
+            containerView.layer.borderColor = UIColor.clear.cgColor
+        case .underline:
+            setupUnderline(color: borderLineColor, withThickness: borderLineThickness)
+            containerView.layer.borderWidth = 0
+            containerView.layer.borderColor = UIColor.clear.cgColor
+        case .box:
+            setupUnderline(color: UIColor.clear, withThickness: 0)
+            containerView.layer.borderWidth = borderLineThickness
+            containerView.layer.borderColor = borderLineColor.cgColor
+        }
         
         //reset the resetFlag :P
         if isResetting && (indexPath.row == pinLength - 1) {
@@ -187,11 +245,17 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.width - (interSpace * CGFloat(max(pinLength, 1) - 1)))/CGFloat(pinLength)
-        return CGSize(width: width, height: collectionView.bounds.height)
+        return CGSize(width: width, height: width)
     }
         
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return interSpace
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let width = (collectionView.bounds.width - (interSpace * CGFloat(max(pinLength, 1) - 1)))/CGFloat(pinLength)
+        let top = (collectionView.bounds.height - width) / 2
+        return UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
     }
     
     public override func layoutSubviews() {
@@ -207,5 +271,16 @@ extension SVPinView : UITextFieldDelegate
             textField.isSecureTextEntry = false
             textField.text =  " "
         }
+    }
+    
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string == UIPasteboard.general.string {
+            textField.resignFirstResponder()
+            DispatchQueue.main.async {
+                self.pastePin(pin: string)
+            }
+            return false
+        }
+        return true
     }
 }

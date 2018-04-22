@@ -8,15 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		ACC5DC0020469FEB00FA8CD7 /* SVPinView.gif in Resources */ = {isa = PBXBuildFile; fileRef = ACC5DBFF20469FEB00FA8CD7 /* SVPinView.gif */; };
-		ACC5DC022046A0F300FA8CD7 /* PinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC5DC012046A0F300FA8CD7 /* PinViewController.swift */; };
 		ACC5DC042046A2A400FA8CD7 /* IBInspectables.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC5DC032046A2A400FA8CD7 /* IBInspectables.png */; };
 		ACE199C3204556340041203C /* SVPinView.h in Headers */ = {isa = PBXBuildFile; fileRef = ACE199C1204556340041203C /* SVPinView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ACE199CC2045566E0041203C /* SVPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE199CA2045566E0041203C /* SVPinView.swift */; };
+		B31AAF972089E8D4004F5BE4 /* SVPinField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31AAF962089E8D4004F5BE4 /* SVPinField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		ACC5DBFF20469FEB00FA8CD7 /* SVPinView.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = SVPinView.gif; sourceTree = "<group>"; };
-		ACC5DC012046A0F300FA8CD7 /* PinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinViewController.swift; sourceTree = "<group>"; };
 		ACC5DC032046A2A400FA8CD7 /* IBInspectables.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IBInspectables.png; sourceTree = "<group>"; };
 		ACE199BE204556340041203C /* SVPinView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SVPinView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACE199C1204556340041203C /* SVPinView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVPinView.h; sourceTree = "<group>"; };
@@ -24,6 +23,7 @@
 		ACE199C92045566E0041203C /* SVPinCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SVPinCell.xib; sourceTree = "<group>"; };
 		ACE199CA2045566E0041203C /* SVPinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVPinView.swift; sourceTree = "<group>"; };
 		ACE199CB2045566E0041203C /* SVPinView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SVPinView.xib; sourceTree = "<group>"; };
+		B31AAF962089E8D4004F5BE4 /* SVPinField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVPinField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +67,6 @@
 		ACC5DBFE20469FCA00FA8CD7 /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				ACC5DC012046A0F300FA8CD7 /* PinViewController.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -103,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				ACE199CA2045566E0041203C /* SVPinView.swift */,
+				B31AAF962089E8D4004F5BE4 /* SVPinField.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -199,8 +199,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACC5DC022046A0F300FA8CD7 /* PinViewController.swift in Sources */,
 				ACE199CC2045566E0041203C /* SVPinView.swift in Sources */,
+				B31AAF972089E8D4004F5BE4 /* SVPinField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
