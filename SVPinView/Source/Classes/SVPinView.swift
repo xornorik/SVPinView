@@ -33,6 +33,8 @@ public class SVPinView: UIView {
     @IBInspectable public var shouldSecureText:Bool = true
     @IBInspectable public var fieldBackgroundColor:UIColor = UIColor.clear
     @IBInspectable public var fieldCornerRadius:CGFloat = 0
+    @IBInspectable public var placeholder:String = ""
+
     public var style:SVPinViewStyle = .underline
     
     public var font:UIFont = UIFont.systemFont(ofSize: 15)
@@ -44,7 +46,7 @@ public class SVPinView: UIView {
     
     fileprivate var view:UIView!
     fileprivate var reuseIdentifier = "SVPinCell"
-    fileprivate var isResetting = false
+    fileprivate var isLoading = true
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -70,6 +72,7 @@ public class SVPinView: UIView {
     @objc fileprivate func textFieldDidChange(_ textField: UITextField) {
         var nextTag = textField.tag
         let index = nextTag - 100
+        let placeholderLabel = textField.superview?.viewWithTag(400) as! UILabel
         
         //ensure single character in text box and trim spaces
         if textField.text!.count > 1 {
@@ -106,11 +109,16 @@ public class SVPinView: UIView {
             textField.resignFirstResponder()
         }
         
+        //activate the placeholder if textField empty
+        placeholderLabel.isHidden = !textField.text!.isEmpty
+        
         //secure text after a bit
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             if textField.text == "" {
                 textField.text = " "
+                placeholderLabel.isHidden = false
             } else {
+                placeholderLabel.isHidden = true
                 if self.shouldSecureText {textField.text = self.secureCharacter} else {}
             }
         })
@@ -139,9 +147,21 @@ public class SVPinView: UIView {
         }
     }
     
+    fileprivate func setPlaceholder() {
+        for (index,char) in placeholder.enumerated() {
+            guard index < pinLength else {return}
+            
+            let placeholderLabel = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(400) as! UILabel
+            placeholderLabel.text = String(char)
+        }
+    }
+    
     //MARK: Public methods
     @objc
     public func getPin() -> String {
+        
+        guard !isLoading else {return ""}
+        
         guard password.count == pinLength && password.joined().trimmingCharacters(in: CharacterSet(charactersIn: " ")).count == pinLength else {
             print("")
             return ""
@@ -151,9 +171,14 @@ public class SVPinView: UIView {
     
     @objc
     public func clearPin() {
+        
+        guard !isLoading else {return}
+        
         password.removeAll()
-        isResetting = true
-        self.collectionView.reloadData()
+        self.view.removeFromSuperview()
+        isLoading = true
+        loadView()
+//        self.collectionView.reloadData()
     }
     
     @objc
@@ -166,12 +191,16 @@ public class SVPinView: UIView {
             
             //Get the first textField
             let textField = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(101 + index) as! SVPinField
+            let placeholderLabel = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(400) as! UILabel
+
             textField.text = String(char)
+            placeholderLabel.isHidden = true
             
             //secure text after a bit
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
                 if textField.text == "" {
                     textField.text = " "
+                    placeholderLabel.isHidden = false
                 } else {
                     if self.shouldSecureText {textField.text = self.secureCharacter} else {}
                 }
@@ -192,10 +221,10 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         
-        //The tag of the last cell of the pinView is (100 + (pinLength - indexPath.row))
-        let textField = isResetting ? (cell.viewWithTag(100 + (pinLength - indexPath.row)) as! SVPinField) : (cell.viewWithTag(100) as! SVPinField)
+        let textField = cell.viewWithTag(100) as! SVPinField
         let containerView = cell.viewWithTag(51)!
         let underLine = cell.viewWithTag(50)!
+        let placeholderLabel = cell.viewWithTag(400) as! UILabel
 
         //Setting up textField
         textField.tag = 101 + indexPath.row
@@ -209,6 +238,9 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        placeholderLabel.text = ""
+        placeholderLabel.textColor = self.textColor.withAlphaComponent(0.5)
         
         containerView.backgroundColor = fieldBackgroundColor
         containerView.layer.cornerRadius = fieldCornerRadius
@@ -235,15 +267,22 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
             containerView.layer.borderColor = borderLineColor.cgColor
         }
         
-        //reset the resetFlag :P
-        if isResetting && (indexPath.row == pinLength - 1) {
-            isResetting = false
+        //Finished loading pinView
+        if indexPath.row == pinLength - 1 && isLoading {
+            isLoading = false
+            DispatchQueue.main.async {
+                if !self.placeholder.isEmpty {self.setPlaceholder()}
+            }
         }
         
         return cell
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
+            let width = (collectionView.bounds.width - (interSpace * CGFloat(max(pinLength, 1) - 1)))/CGFloat(pinLength)
+            return CGSize(width: width, height: collectionView.frame.height)
+        }
         let width = (collectionView.bounds.width - (interSpace * CGFloat(max(pinLength, 1) - 1)))/CGFloat(pinLength)
         return CGSize(width: width, height: width)
     }
@@ -253,6 +292,9 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
+            return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
         let width = (collectionView.bounds.width - (interSpace * CGFloat(max(pinLength, 1) - 1)))/CGFloat(pinLength)
         let top = (collectionView.bounds.height - width) / 2
         return UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
@@ -266,10 +308,13 @@ extension SVPinView : UITextFieldDelegate
 {
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         let text = textField.text!
+        let placeholderLabel = textField.superview?.viewWithTag(400) as! UILabel
+        placeholderLabel.isHidden = true
 
         if text.count == 0 {
             textField.isSecureTextEntry = false
             textField.text =  " "
+            placeholderLabel.isHidden = false
         }
     }
     

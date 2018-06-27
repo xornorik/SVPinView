@@ -19,20 +19,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O96-Bq-RdG" customClass="SVPinView" customModule="SVPinView">
-                                <rect key="frame" x="8" y="151" width="359" height="80"/>
+                                <rect key="frame" x="8" y="111" width="359" height="80"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="Mp3-x8-33O"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter your pin number." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h5A-dA-yto">
-                                <rect key="frame" x="70.5" y="100.5" width="233.5" height="20.5"/>
+                                <rect key="frame" x="70.5" y="60.5" width="233.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="HQD-oC-cdb">
-                                <rect key="frame" x="50" y="281" width="275" height="30"/>
+                                <rect key="frame" x="50" y="241" width="275" height="30"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xpc-Vf-TKF">
                                         <rect key="frame" x="0.0" y="0.0" width="79" height="30"/>
@@ -103,7 +103,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="efM-EP-VzY">
-                                <rect key="frame" x="106.5" y="341" width="161" height="30"/>
+                                <rect key="frame" x="106.5" y="301" width="161" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="0.29984482019999997" colorSpace="calibratedWhite"/>
                                 <state key="normal" title="  Paste from Clipboard  ">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -113,7 +113,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SVPinView" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TnQ-7W-wBd">
-                                <rect key="frame" x="145" y="40" width="85.5" height="20.5"/>
+                                <rect key="frame" x="145" y="30" width="85.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -127,9 +127,9 @@
                             <constraint firstItem="TnQ-7W-wBd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8ox-7i-qXu"/>
                             <constraint firstItem="HQD-oC-cdb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="AuA-5F-b16"/>
                             <constraint firstAttribute="trailing" secondItem="O96-Bq-RdG" secondAttribute="trailing" constant="8" id="I5U-Pt-qWF"/>
-                            <constraint firstItem="TnQ-7W-wBd" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="Nmk-Tg-Trs"/>
+                            <constraint firstItem="TnQ-7W-wBd" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="Nmk-Tg-Trs"/>
                             <constraint firstItem="O96-Bq-RdG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="OIL-Bl-z2s"/>
-                            <constraint firstItem="h5A-dA-yto" firstAttribute="top" secondItem="TnQ-7W-wBd" secondAttribute="bottom" constant="40" id="Ud9-yj-kO7"/>
+                            <constraint firstItem="h5A-dA-yto" firstAttribute="top" secondItem="TnQ-7W-wBd" secondAttribute="bottom" constant="10" id="Ud9-yj-kO7"/>
                             <constraint firstItem="efM-EP-VzY" firstAttribute="top" secondItem="HQD-oC-cdb" secondAttribute="bottom" constant="30" id="YcK-Cl-xNu"/>
                             <constraint firstItem="O96-Bq-RdG" firstAttribute="top" secondItem="h5A-dA-yto" secondAttribute="bottom" constant="30" id="e2L-qZ-LpM"/>
                             <constraint firstItem="h5A-dA-yto" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="eeH-dM-Cg9"/>

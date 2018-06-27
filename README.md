@@ -53,6 +53,7 @@ pinView.style = .box
 pinView.font = UIFont.systemFont(ofSize: 15)
 pinView.keyboardType = .phonePad
 pinView.pinIinputAccessoryView = UIView()
+pinView.placeholder = "******"
 ```
 #### Styles
 ```swift

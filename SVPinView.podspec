@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SVPinView"
-  s.version      = "1.0.2"
+  s.version      = "1.0.3"
   s.summary      = "SVPinView is a customisable library used for accepting alphanumeric pins or one-time passwords."
 
   s.homepage     = "https://github.com/xornorik/SVPinView"

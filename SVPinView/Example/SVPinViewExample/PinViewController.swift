@@ -15,13 +15,16 @@ class PinViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "SVPinView"
+        configurePinView()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         
         //Setup background gradient
         let valenciaColor = UIColor(red: 218/255, green: 68/255, blue: 83/255, alpha: 1)
         let discoColor = UIColor(red: 137/255, green: 33/255, blue: 107/255, alpha: 1)
         setGradientBackground(view: self.view, colorTop: valenciaColor, colorBottom: discoColor)
-        
-        configurePinView()
     }
     
     func configurePinView() {
@@ -36,6 +39,7 @@ class PinViewController: UIViewController {
         pinView.style = .none
         pinView.fieldBackgroundColor = UIColor.white.withAlphaComponent(0.3)
         pinView.fieldCornerRadius = 15
+        pinView.placeholder = "******"
         
         pinView.font = UIFont.systemFont(ofSize: 15)
         pinView.keyboardType = .phonePad
@@ -115,10 +119,16 @@ class PinViewController: UIViewController {
     }
     
     func setGradientBackground(view:UIView, colorTop:UIColor, colorBottom:UIColor) {
+        for layer in view.layer.sublayers! {
+            if layer.name == "gradientLayer" {
+                layer.removeFromSuperlayer()
+            }
+        }
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [colorTop.cgColor, colorBottom.cgColor]
         gradientLayer.locations = [0.0, 1.0]
         gradientLayer.frame = view.bounds
+        gradientLayer.name = "gradientLayer"
         view.layer.insertSublayer(gradientLayer, at: 0)
     }
 }
