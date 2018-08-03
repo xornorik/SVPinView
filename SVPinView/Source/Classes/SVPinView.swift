@@ -40,6 +40,7 @@ public class SVPinView: UIView {
     public var font:UIFont = UIFont.systemFont(ofSize: 15)
     public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
     public var pinIinputAccessoryView:UIView = UIView()
+    public var becomeFirstResponderAtIndex:Int? = nil
     
     fileprivate var password = [String]()
     public var didFinishCallback: ((String)->())?
@@ -58,7 +59,7 @@ public class SVPinView: UIView {
         let nib = UINib(nibName: "SVPinView", bundle: podBundle)
         view = nib.instantiate(withOwner: self, options: nil)[0] as! UIView
         
-        //for CollectionView
+        // for CollectionView
         let collectionViewNib = UINib(nibName: "SVPinCell", bundle:podBundle)
         collectionView.register(collectionViewNib, forCellWithReuseIdentifier: reuseIdentifier)
         flowLayout.scrollDirection = .vertical //weird!!!
@@ -74,7 +75,7 @@ public class SVPinView: UIView {
         let index = nextTag - 100
         let placeholderLabel = textField.superview?.viewWithTag(400) as! UILabel
         
-        //ensure single character in text box and trim spaces
+        // ensure single character in text box and trim spaces
         if textField.text!.count > 1 {
             textField.text?.removeFirst()
             textField.text = { () -> String in
@@ -92,7 +93,7 @@ public class SVPinView: UIView {
             }
         }
         
-        //check if entered text is backspace
+        // check if entered text is backspace
         if isBackSpace() {
             nextTag = textField.tag - 1
         } else {
@@ -109,10 +110,10 @@ public class SVPinView: UIView {
             textField.resignFirstResponder()
         }
         
-        //activate the placeholder if textField empty
+        // activate the placeholder if textField empty
         placeholderLabel.isHidden = !textField.text!.isEmpty
         
-        //secure text after a bit
+        // secure text after a bit
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             if textField.text == "" {
                 textField.text = " "
@@ -123,11 +124,11 @@ public class SVPinView: UIView {
             }
         })
 
-        //store text 
+        // store text
         let text =  textField.text ?? ""
         let passwordIndex = index - 1
         if password.count > (passwordIndex) {
-            //delete if space 
+            // delete if space
             if text == " " {
                 password[passwordIndex] = ""
             } else {
@@ -156,7 +157,7 @@ public class SVPinView: UIView {
         }
     }
     
-    //MARK: Public methods
+    // MARK: Public methods
     @objc
     public func getPin() -> String {
         
@@ -178,7 +179,6 @@ public class SVPinView: UIView {
         self.view.removeFromSuperview()
         isLoading = true
         loadView()
-//        self.collectionView.reloadData()
     }
     
     @objc
@@ -206,7 +206,7 @@ public class SVPinView: UIView {
                 }
             })
             
-            //store text
+            // store text
             password.append(String(char))
             validateAndSendCallback()
         }
@@ -226,7 +226,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         let underLine = cell.viewWithTag(50)!
         let placeholderLabel = cell.viewWithTag(400) as! UILabel
 
-        //Setting up textField
+        // Setting up textField
         textField.tag = 101 + indexPath.row
         textField.text = " "
         textField.isSecureTextEntry = false
@@ -267,7 +267,12 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
             containerView.layer.borderColor = borderLineColor.cgColor
         }
         
-        //Finished loading pinView
+        // Make the Pin field the first responder
+        if let firstResponderIndex = becomeFirstResponderAtIndex, firstResponderIndex == indexPath.item {
+            textField.becomeFirstResponder()
+        }
+        
+        // Finished loading pinView
         if indexPath.row == pinLength - 1 && isLoading {
             isLoading = false
             DispatchQueue.main.async {
@@ -284,7 +289,8 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
             return CGSize(width: width, height: collectionView.frame.height)
         }
         let width = (collectionView.bounds.width - (interSpace * CGFloat(max(pinLength, 1) - 1)))/CGFloat(pinLength)
-        return CGSize(width: width, height: width)
+        let height = collectionView.frame.height
+        return CGSize(width: min(width, height), height: min(width, height))
     }
         
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -292,11 +298,20 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
         if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
             return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
         let width = (collectionView.bounds.width - (interSpace * CGFloat(max(pinLength, 1) - 1)))/CGFloat(pinLength)
-        let top = (collectionView.bounds.height - width) / 2
+        let height = collectionView.frame.height
+        let top = (collectionView.bounds.height - min(width, height)) / 2
+        if height < width {
+            // If width of field > height, size the fields to the pinView height and center them.
+            let totalCellWidth = height * CGFloat(pinLength)
+            let totalSpacingWidth = interSpace * CGFloat(max(pinLength, 1) - 1)
+            let inset = (collectionView.frame.size.width - CGFloat(totalCellWidth + CGFloat(totalSpacingWidth))) / 2
+            return UIEdgeInsets(top: top, left: inset, bottom: 0, right: inset)
+        }
         return UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
     }
     

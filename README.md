@@ -54,7 +54,10 @@ pinView.font = UIFont.systemFont(ofSize: 15)
 pinView.keyboardType = .phonePad
 pinView.pinIinputAccessoryView = UIView()
 pinView.placeholder = "******"
+pinView.becomeFirstResponderAtIndex = 0
 ```
+The `becomeFirstResponderAtIndex` property sets the pinField at the specified index as the first responder.
+
 #### Styles
 ```swift
 enum SVPinViewStyle : Int {

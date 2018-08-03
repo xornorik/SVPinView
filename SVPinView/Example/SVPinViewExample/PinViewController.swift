@@ -21,7 +21,7 @@ class PinViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        //Setup background gradient
+        // Setup background gradient
         let valenciaColor = UIColor(red: 218/255, green: 68/255, blue: 83/255, alpha: 1)
         let discoColor = UIColor(red: 137/255, green: 33/255, blue: 107/255, alpha: 1)
         setGradientBackground(view: self.view, colorTop: valenciaColor, colorBottom: discoColor)
@@ -40,6 +40,7 @@ class PinViewController: UIViewController {
         pinView.fieldBackgroundColor = UIColor.white.withAlphaComponent(0.3)
         pinView.fieldCornerRadius = 15
         pinView.placeholder = "******"
+        pinView.becomeFirstResponderAtIndex = 0
         
         pinView.font = UIFont.systemFont(ofSize: 15)
         pinView.keyboardType = .phonePad
@@ -111,7 +112,7 @@ class PinViewController: UIViewController {
         showAlert(title: "Success", message: "The Pin entered is \(pin)")
     }
     
-    //MARK: Helper Functions
+    // MARK: Helper Functions
     func showAlert(title:String, message:String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
