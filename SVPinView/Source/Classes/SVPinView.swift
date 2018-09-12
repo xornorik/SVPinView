@@ -57,7 +57,7 @@ public class SVPinView: UIView {
             }
         }
     }
-    public var pinIinputAccessoryView:UIView = UIView() {
+    public var pinIinputAccessoryView:UIView? {
         didSet {
             let cells = self.collectionView?.visibleCells ?? []
             for (idx, cell) in cells.enumerated() {
@@ -77,6 +77,7 @@ public class SVPinView: UIView {
     
     fileprivate var password = [String]()
     public var didFinishCallback: ((String)->())?
+    public var didChangeCallback: ((String)->())?
     
     fileprivate var view:UIView!
     fileprivate var reuseIdentifier = "SVPinCell"
@@ -188,6 +189,7 @@ public class SVPinView: UIView {
     
     private func validateAndSendCallback() {
         let pin = getPin()
+        self.didChangeCallback?(pin)
         guard !pin.isEmpty else {return}
         if didFinishCallback != nil {
             didFinishCallback!(pin)
@@ -213,6 +215,24 @@ public class SVPinView: UIView {
     
     // MARK: Public methods
     @objc
+    public func setBorderColor(color:UIColor?=nil) {
+        let cells = self.collectionView?.visibleCells ?? []
+        for (idx, cell) in cells.enumerated() {
+            if let textField = cell.viewWithTag(101+idx) as? SVPinField {
+                var color = color ?? (textField.text!.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 ? self.emptyBorderLineColor : self.borderLineColor)
+                if textField.isFirstResponder && self.activeBorderLineColor != self.borderLineColor {
+                    color = self.activeBorderLineColor
+                }
+                textField.superview?.viewWithTag(50)?.backgroundColor = color
+                if style == .box {
+                    textField.superview?.layer.borderColor = color.cgColor
+                }
+            }
+        }
+    }
+    
+    
+    @objc
     public func getPin() -> String {
         
         guard !isLoading else {return ""}
@@ -230,9 +250,10 @@ public class SVPinView: UIView {
         guard !isLoading else {return}
         
         password.removeAll()
-        self.view.removeFromSuperview()
-        isLoading = true
-        loadView()
+        let cells = self.collectionView?.visibleCells ?? []
+        for (idx, cell) in cells.enumerated() {
+            (cell.viewWithTag(101+idx) as? SVPinField)?.text = ""
+        }
     }
     
     @objc
@@ -385,14 +406,8 @@ extension SVPinView : UITextFieldDelegate
             textField.text =  " "
             placeholderLabel.isHidden = false
         }
-        if self.activeBorderLineColor != self.borderLineColor {
-            textField.superview?.viewWithTag(50)?.backgroundColor = self.activeBorderLineColor
-            if style == .box {
-                textField.superview?.layer.borderColor = self.activeBorderLineColor.cgColor
-            }
-        }
+        self.setBorderColor()
     }
-    
     public func textFieldDidEndEditing(_ textField: UITextField) {
         let text = textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         textField.superview?.viewWithTag(50)?.backgroundColor = text.count == 0 ? self.emptyBorderLineColor : self.borderLineColor
