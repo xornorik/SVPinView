@@ -57,7 +57,7 @@ public class SVPinView: UIView {
     private func loadView() {
         let podBundle = Bundle(for: SVPinView.self)
         let nib = UINib(nibName: "SVPinView", bundle: podBundle)
-        view = nib.instantiate(withOwner: self, options: nil)[0] as! UIView
+        view = nib.instantiate(withOwner: self, options: nil)[0] as? UIView
         
         // for CollectionView
         let collectionViewNib = UINib(nibName: "SVPinCell", bundle:podBundle)
@@ -67,7 +67,8 @@ public class SVPinView: UIView {
 
         self.addSubview(view)
         view.frame = bounds
-        view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
+        view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth,
+                                 UIView.AutoresizingMask.flexibleHeight]
     }
     
     @objc fileprivate func textFieldDidChange(_ textField: UITextField) {
@@ -101,10 +102,9 @@ public class SVPinView: UIView {
         }
         
         // Try to find next responder
-        let nextResponder = textField.superview?.superview?.superview?.superview?.viewWithTag(nextTag) as UIResponder!
-        if (nextResponder != nil) {
+        if let nextResponder = textField.superview?.superview?.superview?.superview?.viewWithTag(nextTag) {
             // Found next responder, so set it.
-            nextResponder?.becomeFirstResponder()
+            nextResponder.becomeFirstResponder()
         } else {
             // Not found, so dismiss keyboard
             textField.resignFirstResponder()
