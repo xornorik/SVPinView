@@ -45,10 +45,13 @@ pinView.pinLength = 5
 pinView.secureCharacter = "\u{25CF}"
 pinView.interSpace = 5
 pinView.textColor = UIColor.black
-pinView.borderLineColor = UIColor.black
-pinView.borderLineThickness = 1
 pinView.shouldSecureText = true
 pinView.style = .box
+
+pinView.borderLineColor = UIColor.black
+pinView.activeBorderLineColor = UIColor.lightGray
+pinView.borderLineThickness = 1
+pinView.activeBorderLineThickness = 3
 
 pinView.font = UIFont.systemFont(ofSize: 15)
 pinView.keyboardType = .phonePad
@@ -57,16 +60,17 @@ pinView.placeholder = "******"
 pinView.becomeFirstResponderAtIndex = 0
 ```
 The `becomeFirstResponderAtIndex` property sets the pinField at the specified index as the first responder.
+The `isContentTypeOneTimeCode` property sets the contentType of the first pinField to `.oneTimeCode` to leverage the iOS 12 feature where the passcode is directly fetched from the messages. 
 
 #### Styles
 ```swift
 enum SVPinViewStyle : Int {
-  case none = 0
-  case underline
-  case box
+case none = 0
+case underline
+case box
 }
 ```
-There are two inbuilt styes; `underline` & `box`. However, the *fieldBackgroundColor* & *fieldCornerRadius* properties can be used to create custom styles.
+There are two inbuilt styes; `underline` & `box`. However, the *fieldBackgroundColor* & *fieldCornerRadius* properties along with *activeFieldBackgroundColor* & *activeCornerRadius* properties can be used to create custom styles.
 ```swift
 pinView.style = .none
 pinView.fieldBackgroundColor = UIColor.white
@@ -80,11 +84,16 @@ pinView.fieldCornerRadius = 0
 
 ### Callbacks
 
-SVPinView has a *didFinish* callback, which gets executed after the pin has been entered. This is useful when a network call has to be made or for navigating to a different ViewController after the pin has been entered.
-
+- **didFinishCallback**: Gets executed after the entire pin has been entered. This is useful when a network call has to be made or for navigating to a different ViewController after the pin has been entered.
+- **didChangeCallback**: Gets executed when any of the pinFields have been changed. This gives additional control to the parent VC - Eg: if a submit button has to be enabled/disabled based on the pin validation. 
 ```swift
 pinView.didFinishCallback = { pin in
-  print("The pin entered is \(pin)")
+print("The pin entered is \(pin)")
+}
+```
+```swift
+pinView.didChangeCallback = { pin in
+submitButton.isEnabled = isValid(pin)
 }
 ```
 

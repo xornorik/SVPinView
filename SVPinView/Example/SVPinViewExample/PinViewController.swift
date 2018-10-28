@@ -34,17 +34,21 @@ class PinViewController: UIViewController {
         pinView.interSpace = 10
         pinView.textColor = UIColor.white
         pinView.borderLineColor = UIColor.white
+        pinView.activeBorderLineColor = UIColor.white
         pinView.borderLineThickness = 1
         pinView.shouldSecureText = true
+        pinView.allowsWhitespaces = false
         pinView.style = .none
         pinView.fieldBackgroundColor = UIColor.white.withAlphaComponent(0.3)
+        pinView.activeFieldBackgroundColor = UIColor.white.withAlphaComponent(0.5)
         pinView.fieldCornerRadius = 15
+        pinView.activeFieldCornerRadius = 15
         pinView.placeholder = "******"
         pinView.becomeFirstResponderAtIndex = 0
         
         pinView.font = UIFont.systemFont(ofSize: 15)
         pinView.keyboardType = .phonePad
-        pinView.pinIinputAccessoryView = { () -> UIView in
+        pinView.pinInputAccessoryView = { () -> UIView in
             let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
             doneToolbar.barStyle = UIBarStyle.default
             let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
@@ -94,15 +98,23 @@ class PinViewController: UIViewController {
         switch style {
         case .none:
             pinView.fieldBackgroundColor = UIColor.white.withAlphaComponent(0.3)
+            pinView.activeFieldBackgroundColor = UIColor.white.withAlphaComponent(0.5)
             pinView.fieldCornerRadius = 15
+            pinView.activeFieldCornerRadius = 15
             pinView.style = style
         case .box:
+            pinView.activeBorderLineThickness = 4
             pinView.fieldBackgroundColor = UIColor.clear
+            pinView.activeFieldBackgroundColor = UIColor.clear
             pinView.fieldCornerRadius = 0
+            pinView.activeFieldCornerRadius = 0
             pinView.style = style
         case .underline:
+            pinView.activeBorderLineThickness = 4
             pinView.fieldBackgroundColor = UIColor.clear
+            pinView.activeFieldBackgroundColor = UIColor.clear
             pinView.fieldCornerRadius = 0
+            pinView.activeFieldCornerRadius = 0
             pinView.style = style
         }
         clearPin()

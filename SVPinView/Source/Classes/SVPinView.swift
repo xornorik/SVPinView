@@ -18,71 +18,54 @@ public enum SVPinViewStyle : Int {
 @objc
 public class SVPinView: UIView {
     
+    // MARK: - Private Properties -
     @IBOutlet fileprivate var collectionView : UICollectionView!
     
     fileprivate var flowLayout: UICollectionViewFlowLayout {
         return self.collectionView?.collectionViewLayout as! UICollectionViewFlowLayout
     }
     
+    fileprivate var view:UIView!
+    fileprivate var reuseIdentifier = "SVPinCell"
+    fileprivate var isLoading = true
+    fileprivate var password = [String]()
+    
+    // MARK: - Public Properties -
     @IBInspectable public var pinLength:Int = 5
     @IBInspectable public var secureCharacter:String = "\u{25CF}"
     @IBInspectable public var interSpace:CGFloat = 5
     @IBInspectable public var textColor:UIColor = UIColor.black
-    @IBInspectable public var borderLineColor:UIColor = UIColor.black
-    @IBInspectable public var borderLineThickness:CGFloat = 2
-    @IBInspectable public var emptyBorderLineColor:UIColor = UIColor.black
-    @IBInspectable public var activeBorderLineColor:UIColor = UIColor.black
-    @IBInspectable public var shouldDismissKeyboardOnEmptyFirstField:Bool = true
     @IBInspectable public var shouldSecureText:Bool = true
-    @IBInspectable public var allowsWhitespace:Bool = true
-    @IBInspectable public var fieldBackgroundColor:UIColor = UIColor.clear
-    @IBInspectable public var fieldCornerRadius:CGFloat = 0
+    @IBInspectable public var allowsWhitespaces:Bool = true
     @IBInspectable public var placeholder:String = ""
-
+    
+    @IBInspectable public var borderLineColor:UIColor = UIColor.black
+    @IBInspectable public var activeBorderLineColor:UIColor = UIColor.black
+    
+    @IBInspectable public var borderLineThickness:CGFloat = 2
+    @IBInspectable public var activeBorderLineThickness:CGFloat = 4
+    
+    @IBInspectable public var fieldBackgroundColor:UIColor = UIColor.clear
+    @IBInspectable public var activeFieldBackgroundColor:UIColor = UIColor.clear
+    
+    @IBInspectable public var fieldCornerRadius:CGFloat = 0
+    @IBInspectable public var activeFieldCornerRadius:CGFloat = 0
+    
     public var style:SVPinViewStyle = .underline
     
-    public var font:UIFont = UIFont.systemFont(ofSize: 15){
-        didSet {
-            let cells = self.collectionView?.visibleCells ?? []
-            for (idx, cell) in cells.enumerated() {
-                (cell.viewWithTag(101+idx) as? SVPinField)?.font = self.font
-            }
-        }
-    }
-    public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad {
-        didSet {
-            let cells = self.collectionView?.visibleCells ?? []
-            for (idx, cell) in cells.enumerated() {
-                (cell.viewWithTag(101+idx) as? SVPinField)?.keyboardType = self.keyboardType
-            }
-        }
-    }
-    public var pinIinputAccessoryView:UIView? {
-        didSet {
-            let cells = self.collectionView?.visibleCells ?? []
-            for (idx, cell) in cells.enumerated() {
-                (cell.viewWithTag(101+idx) as? SVPinField)?.inputAccessoryView = self.pinIinputAccessoryView
-            }
-        }
-    }
-    public var becomeFirstResponderAtIndex:Int? {
-        didSet {
-            if let firstResponseIndex = self.becomeFirstResponderAtIndex {
-                self.getTextField(forIndex: firstResponseIndex)?.becomeFirstResponder()
-            }
-        }
+    public var font:UIFont = UIFont.systemFont(ofSize: 15)
+    public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
+    public var becomeFirstResponderAtIndex:Int? = nil
+    public var isContentTypeOneTimeCode:Bool = true
+    public var shouldDismissKeyboardOnEmptyFirstField:Bool = false
+    public var pinInputAccessoryView:UIView? {
+        didSet { refreshPinView() }
     }
     
-
-    
-    fileprivate var password = [String]()
     public var didFinishCallback: ((String)->())?
     public var didChangeCallback: ((String)->())?
     
-    fileprivate var view:UIView!
-    fileprivate var reuseIdentifier = "SVPinCell"
-    fileprivate var isLoading = true
-
+    // MARK: - Init methods -
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         loadView()
@@ -91,24 +74,25 @@ public class SVPinView: UIView {
     private func loadView() {
         let podBundle = Bundle(for: SVPinView.self)
         let nib = UINib(nibName: "SVPinView", bundle: podBundle)
-        view = nib.instantiate(withOwner: self, options: nil)[0] as! UIView
+        view = nib.instantiate(withOwner: self, options: nil)[0] as? UIView
         
         // for CollectionView
         let collectionViewNib = UINib(nibName: "SVPinCell", bundle:podBundle)
         collectionView.register(collectionViewNib, forCellWithReuseIdentifier: reuseIdentifier)
         flowLayout.scrollDirection = .vertical //weird!!!
         collectionView.isScrollEnabled = false
-
+        
         self.addSubview(view)
         view.frame = bounds
         view.autoresizingMask = [UIViewAutoresizing.flexibleWidth, UIViewAutoresizing.flexibleHeight]
     }
     
+    // MARK: - Private methods -
     @objc fileprivate func textFieldDidChange(_ textField: UITextField) {
         var nextTag = textField.tag
         let index = nextTag - 100
         let placeholderLabel = textField.superview?.viewWithTag(400) as! UILabel
-
+        
         // ensure single character in text box and trim spaces
         if textField.text!.count > 1 {
             textField.text?.removeFirst()
@@ -116,39 +100,29 @@ public class SVPinView: UIView {
                 let text = textField.text ?? ""
                 return String(text[..<text.index((text.startIndex), offsetBy: 1)])
             }()
+            textField.layer.sublayerTransform = CATransform3DMakeTranslation(0, 0, 0)
         }
         
         let isBackSpace = { () -> Bool in
             let char = textField.text!.cString(using: String.Encoding.utf8)!
-            if strcmp(char, "\\b") == -92 {
-                return true
-            } else {
-                return false
-            }
+            return strcmp(char, "\\b") == -92
         }
         
-        // check if entered text is backspace
-        if isBackSpace() {
-            nextTag = textField.tag - 1
-        } else {
-            nextTag = textField.tag + 1
-        }
-        
-        if !self.allowsWhitespace && !isBackSpace() && textField.text!.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
+        if !self.allowsWhitespaces && !isBackSpace() && textField.text!.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
             return
         }
         
+        // check if entered text is a backspace
+        nextTag = isBackSpace() ? textField.tag - 1 : textField.tag + 1
+        
         // Try to find next responder
-        let nextResponder = textField.superview?.superview?.superview?.superview?.viewWithTag(nextTag) as UIResponder?
-        if (nextResponder != nil) {
-            // Found next responder, so set it.
-            nextResponder?.becomeFirstResponder()
+        if let nextResponder = textField.superview?.superview?.superview?.superview?.viewWithTag(nextTag) as UIResponder? {
+            nextResponder.becomeFirstResponder()  // Found next responder, so set it.
         } else {
             // Not found, so dismiss keyboard
-            if !isBackSpace() && self.shouldDismissKeyboardOnEmptyFirstField {
+            if index == 1 && shouldDismissKeyboardOnEmptyFirstField {
                 textField.resignFirstResponder()
-            }
-            
+            } else if index > 1 { textField.resignFirstResponder() }
         }
         
         // activate the placeholder if textField empty
@@ -159,116 +133,119 @@ public class SVPinView: UIView {
             if textField.text == "" {
                 textField.text = " "
                 placeholderLabel.isHidden = false
+                textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
             } else {
                 placeholderLabel.isHidden = true
-                if self.shouldSecureText {textField.text = self.secureCharacter} else {}
+                if self.shouldSecureText { textField.text = self.secureCharacter } else {}
             }
         })
-
+        
         // store text
         let text =  textField.text ?? ""
-        if self.activeBorderLineColor == self.borderLineColor {
-            textField.superview?.viewWithTag(50)?.backgroundColor = text.count > 0 ? self.borderLineColor : self.emptyBorderLineColor
-            if style == .box {
-                textField.superview?.layer.borderColor = (text.count > 0 ? self.borderLineColor : self.emptyBorderLineColor).cgColor
-            }
-        }
         let passwordIndex = index - 1
         if password.count > (passwordIndex) {
             // delete if space
-            if text == " " {
-                password[passwordIndex] = ""
-            } else {
-                password[passwordIndex] = text
-            }
+            password[passwordIndex] = text == " " ? "" : text
         } else {
             password.append(text)
         }
         validateAndSendCallback()
     }
     
-    private func validateAndSendCallback() {
+    fileprivate func validateAndSendCallback() {
+        didChangeCallback?(password.joined())
+        
         let pin = getPin()
-        self.didChangeCallback?(pin)
-        guard !pin.isEmpty else {return}
-        if didFinishCallback != nil {
-            didFinishCallback!(pin)
-        }
+        guard !pin.isEmpty else { return }
+        didFinishCallback?(pin)
     }
     
     fileprivate func setPlaceholder() {
-        for (index,char) in placeholder.enumerated() {
-            guard index < pinLength else {return}
+        for (index, char) in placeholder.enumerated() {
+            guard index < pinLength else { return }
             
             let placeholderLabel = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(400) as! UILabel
             placeholderLabel.text = String(char)
         }
     }
     
-    fileprivate func getTextField(forIndex index:Int) -> SVPinField? {
-        if index >= self.collectionView.numberOfItems(inSection: 0) {
-            return nil
+    fileprivate func stylePinField(containerView: UIView, underLine: UIView, isActive: Bool) {
+        
+        containerView.backgroundColor = isActive ? activeFieldBackgroundColor : fieldBackgroundColor
+        containerView.layer.cornerRadius = isActive ? activeFieldCornerRadius : fieldCornerRadius
+        
+        func setupUnderline(color:UIColor, withThickness thickness:CGFloat) {
+            underLine.backgroundColor = color
+            underLine.constraints.filter { ($0.identifier == "underlineHeight") }.first?.constant = thickness
         }
         
-        return self.collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(101+index) as? SVPinField
-    }
-    
-    // MARK: Public methods
-    @objc
-    public func setBorderColor(color:UIColor?=nil) {
-        let cells = self.collectionView?.visibleCells ?? []
-        for (idx, cell) in cells.enumerated() {
-            if let textField = cell.viewWithTag(101+idx) as? SVPinField {
-                var color = color ?? (textField.text!.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 ? self.emptyBorderLineColor : self.borderLineColor)
-                if textField.isFirstResponder && self.activeBorderLineColor != self.borderLineColor {
-                    color = self.activeBorderLineColor
-                }
-                textField.superview?.viewWithTag(50)?.backgroundColor = color
-                if style == .box {
-                    textField.superview?.layer.borderColor = color.cgColor
-                }
-            }
+        switch style {
+        case .none:
+            setupUnderline(color: UIColor.clear, withThickness: 0)
+            containerView.layer.borderWidth = 0
+            containerView.layer.borderColor = UIColor.clear.cgColor
+        case .underline:
+            if isActive { setupUnderline(color: activeBorderLineColor, withThickness: activeBorderLineThickness) }
+            else { setupUnderline(color: borderLineColor, withThickness: borderLineThickness) }
+            containerView.layer.borderWidth = 0
+            containerView.layer.borderColor = UIColor.clear.cgColor
+        case .box:
+            setupUnderline(color: UIColor.clear, withThickness: 0)
+            containerView.layer.borderWidth = isActive ? activeBorderLineThickness : borderLineThickness
+            containerView.layer.borderColor = isActive ? activeBorderLineColor.cgColor : borderLineColor.cgColor
         }
+     }
+    
+    fileprivate func refreshPinView() {
+        view.removeFromSuperview()
+        view = nil
+        isLoading = true
+        loadView()
     }
     
+    // MARK: - Public methods -
     
+    /// Returns the entered PIN; returns empty string if incomplete
+    ///
+    /// - Returns: The entered PIN.
     @objc
     public func getPin() -> String {
         
-        guard !isLoading else {return ""}
+        guard !isLoading else { return "" }
         
         guard password.count == pinLength && password.joined().trimmingCharacters(in: CharacterSet(charactersIn: " ")).count == pinLength else {
-            print("")
             return ""
         }
         return password.joined()
     }
     
+    /// Clears the entered PIN
     @objc
     public func clearPin() {
         
-        guard !isLoading else {return}
+        guard !isLoading else { return }
         
         password.removeAll()
-        let cells = self.collectionView?.visibleCells ?? []
-        for (idx, cell) in cells.enumerated() {
-            (cell.viewWithTag(101+idx) as? SVPinField)?.text = ""
-        }
+        refreshPinView()
     }
     
+    /// Pastes the PIN onto the PinView
+    ///
+    /// - Parameter pin: The pin which is to be entered onto the PinView.
     @objc
     public func pastePin(pin:String) {
         
         password = []
         for (index,char) in pin.enumerated() {
             
-            guard index < pinLength else {return}
+            guard index < pinLength else { return }
             
             //Get the first textField
             let textField = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(101 + index) as! SVPinField
             let placeholderLabel = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(400) as! UILabel
-
+            
             textField.text = String(char)
+            textField.layer.sublayerTransform = CATransform3DMakeTranslation(0, 0, 0)
             placeholderLabel.isHidden = true
             
             //secure text after a bit
@@ -277,7 +254,7 @@ public class SVPinView: UIView {
                     textField.text = " "
                     placeholderLabel.isHidden = false
                 } else {
-                    if self.shouldSecureText {textField.text = self.secureCharacter} else {}
+                    if self.shouldSecureText { textField.text = self.secureCharacter } else {}
                 }
             })
             
@@ -287,6 +264,8 @@ public class SVPinView: UIView {
         }
     }
 }
+
+// MARK: - CollectionView methods -
 extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -300,16 +279,20 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         let containerView = cell.viewWithTag(51)!
         let underLine = cell.viewWithTag(50)!
         let placeholderLabel = cell.viewWithTag(400) as! UILabel
-
+        
         // Setting up textField
         textField.tag = 101 + indexPath.row
         textField.text = " "
+        textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
         textField.isSecureTextEntry = false
         textField.textColor = self.textColor
         textField.tintColor = textColor
         textField.font = self.font
+        if #available(iOS 12.0, *), indexPath.row == 0, isContentTypeOneTimeCode {
+            textField.textContentType = .oneTimeCode
+        }
         textField.keyboardType = self.keyboardType
-        textField.inputAccessoryView = self.pinIinputAccessoryView
+        textField.inputAccessoryView = self.pinInputAccessoryView
         
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -317,30 +300,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         placeholderLabel.text = ""
         placeholderLabel.textColor = self.textColor.withAlphaComponent(0.5)
         
-        containerView.backgroundColor = fieldBackgroundColor
-        containerView.layer.cornerRadius = fieldCornerRadius
-        
-        func setupUnderline(color:UIColor, withThickness thickness:CGFloat) {
-            underLine.backgroundColor = color
-            underLine.constraints.filter { (constraint) -> Bool in
-                return constraint.identifier == "underlineHeight"
-                }.first?.constant = thickness
-        }
-        
-        switch style {
-        case .none:
-            setupUnderline(color: UIColor.clear, withThickness: 0)
-            containerView.layer.borderWidth = 0
-            containerView.layer.borderColor = UIColor.clear.cgColor
-        case .underline:
-            setupUnderline(color: emptyBorderLineColor, withThickness: borderLineThickness)
-            containerView.layer.borderWidth = 0
-            containerView.layer.borderColor = UIColor.clear.cgColor
-        case .box:
-            setupUnderline(color: UIColor.clear, withThickness: 0)
-            containerView.layer.borderWidth = borderLineThickness
-            containerView.layer.borderColor = emptyBorderLineColor.cgColor
-        }
+        stylePinField(containerView: containerView, underLine: underLine, isActive: false)
         
         // Make the Pin field the first responder
         if let firstResponderIndex = becomeFirstResponderAtIndex, firstResponderIndex == indexPath.item {
@@ -351,7 +311,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         if indexPath.row == pinLength - 1 && isLoading {
             isLoading = false
             DispatchQueue.main.async {
-                if !self.placeholder.isEmpty {self.setPlaceholder()}
+                if !self.placeholder.isEmpty { self.setPlaceholder() }
             }
         }
         
@@ -367,7 +327,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         let height = collectionView.frame.height
         return CGSize(width: min(width, height), height: min(width, height))
     }
-        
+    
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return interSpace
     }
@@ -394,30 +354,33 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         flowLayout.invalidateLayout()
     }
 }
+// MARK: - TextField Methods -
 extension SVPinView : UITextFieldDelegate
 {
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         let text = textField.text!
         let placeholderLabel = textField.superview?.viewWithTag(400) as! UILabel
         placeholderLabel.isHidden = true
-
+        
         if text.count == 0 {
             textField.isSecureTextEntry = false
             textField.text =  " "
             placeholderLabel.isHidden = false
         }
-        self.setBorderColor()
+        
+        let containerView = textField.superview?.viewWithTag(51)!
+        let underLine = textField.superview?.viewWithTag(50)!
+        self.stylePinField(containerView: containerView!, underLine: underLine!, isActive: true)
     }
+    
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        let text = textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        textField.superview?.viewWithTag(50)?.backgroundColor = text.count == 0 ? self.emptyBorderLineColor : self.borderLineColor
-        if style == .box {
-            textField.superview?.layer.borderColor = (text.count == 0 ? self.emptyBorderLineColor : self.borderLineColor).cgColor
-        }
+        let containerView = textField.superview?.viewWithTag(51)!
+        let underLine = textField.superview?.viewWithTag(50)!
+        self.stylePinField(containerView: containerView!, underLine: underLine!, isActive: false)
     }
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if string == UIPasteboard.general.string {
+        if (string == UIPasteboard.general.string) || (isContentTypeOneTimeCode && string.count >= pinLength) {
             textField.resignFirstResponder()
             DispatchQueue.main.async {
                 self.pastePin(pin: string)

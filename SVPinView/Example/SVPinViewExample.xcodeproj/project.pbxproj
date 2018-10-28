@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02DB209E217C614000CE469C /* SVPinViewExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SVPinViewExample.entitlements; sourceTree = "<group>"; };
 		0D937BCAD12D8DEB5C39314F /* Pods-SVPinViewExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SVPinViewExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SVPinViewExample/Pods-SVPinViewExample.debug.xcconfig"; sourceTree = "<group>"; };
 		762AB709897C249EA93A3C59 /* Pods_SVPinViewExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SVPinViewExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B31AAF812089DD67004F5BE4 /* SVPinViewExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SVPinViewExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,6 +71,7 @@
 		B31AAF832089DD67004F5BE4 /* SVPinViewExample */ = {
 			isa = PBXGroup;
 			children = (
+				02DB209E217C614000CE469C /* SVPinViewExample.entitlements */,
 				B31AAF842089DD67004F5BE4 /* AppDelegate.swift */,
 				B31AAF862089DD67004F5BE4 /* PinViewController.swift */,
 				B31AAF882089DD67004F5BE4 /* Main.storyboard */,
@@ -123,6 +125,11 @@
 					B31AAF802089DD67004F5BE4 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.SafariKeychain = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
