@@ -30,20 +30,54 @@ public class SVPinView: UIView {
     @IBInspectable public var textColor:UIColor = UIColor.black
     @IBInspectable public var borderLineColor:UIColor = UIColor.black
     @IBInspectable public var borderLineThickness:CGFloat = 2
+    @IBInspectable public var emptyBorderLineColor:UIColor = UIColor.black
+    @IBInspectable public var activeBorderLineColor:UIColor = UIColor.black
+    @IBInspectable public var shouldDismissKeyboardOnEmptyFirstField:Bool = true
     @IBInspectable public var shouldSecureText:Bool = true
+    @IBInspectable public var allowsWhitespace:Bool = true
     @IBInspectable public var fieldBackgroundColor:UIColor = UIColor.clear
     @IBInspectable public var fieldCornerRadius:CGFloat = 0
     @IBInspectable public var placeholder:String = ""
 
     public var style:SVPinViewStyle = .underline
     
-    public var font:UIFont = UIFont.systemFont(ofSize: 15)
-    public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad
-    public var pinIinputAccessoryView:UIView = UIView()
-    public var becomeFirstResponderAtIndex:Int? = nil
+    public var font:UIFont = UIFont.systemFont(ofSize: 15){
+        didSet {
+            let cells = self.collectionView?.visibleCells ?? []
+            for (idx, cell) in cells.enumerated() {
+                (cell.viewWithTag(101+idx) as? SVPinField)?.font = self.font
+            }
+        }
+    }
+    public var keyboardType:UIKeyboardType = UIKeyboardType.phonePad {
+        didSet {
+            let cells = self.collectionView?.visibleCells ?? []
+            for (idx, cell) in cells.enumerated() {
+                (cell.viewWithTag(101+idx) as? SVPinField)?.keyboardType = self.keyboardType
+            }
+        }
+    }
+    public var pinIinputAccessoryView:UIView? {
+        didSet {
+            let cells = self.collectionView?.visibleCells ?? []
+            for (idx, cell) in cells.enumerated() {
+                (cell.viewWithTag(101+idx) as? SVPinField)?.inputAccessoryView = self.pinIinputAccessoryView
+            }
+        }
+    }
+    public var becomeFirstResponderAtIndex:Int? {
+        didSet {
+            if let firstResponseIndex = self.becomeFirstResponderAtIndex {
+                self.getTextField(forIndex: firstResponseIndex)?.becomeFirstResponder()
+            }
+        }
+    }
+    
+
     
     fileprivate var password = [String]()
     public var didFinishCallback: ((String)->())?
+    public var didChangeCallback: ((String)->())?
     
     fileprivate var view:UIView!
     fileprivate var reuseIdentifier = "SVPinCell"
@@ -74,7 +108,7 @@ public class SVPinView: UIView {
         var nextTag = textField.tag
         let index = nextTag - 100
         let placeholderLabel = textField.superview?.viewWithTag(400) as! UILabel
-        
+
         // ensure single character in text box and trim spaces
         if textField.text!.count > 1 {
             textField.text?.removeFirst()
@@ -100,14 +134,21 @@ public class SVPinView: UIView {
             nextTag = textField.tag + 1
         }
         
+        if !self.allowsWhitespace && !isBackSpace() && textField.text!.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
+            return
+        }
+        
         // Try to find next responder
-        let nextResponder = textField.superview?.superview?.superview?.superview?.viewWithTag(nextTag) as UIResponder!
+        let nextResponder = textField.superview?.superview?.superview?.superview?.viewWithTag(nextTag) as UIResponder?
         if (nextResponder != nil) {
             // Found next responder, so set it.
             nextResponder?.becomeFirstResponder()
         } else {
             // Not found, so dismiss keyboard
-            textField.resignFirstResponder()
+            if !isBackSpace() && self.shouldDismissKeyboardOnEmptyFirstField {
+                textField.resignFirstResponder()
+            }
+            
         }
         
         // activate the placeholder if textField empty
@@ -126,6 +167,12 @@ public class SVPinView: UIView {
 
         // store text
         let text =  textField.text ?? ""
+        if self.activeBorderLineColor == self.borderLineColor {
+            textField.superview?.viewWithTag(50)?.backgroundColor = text.count > 0 ? self.borderLineColor : self.emptyBorderLineColor
+            if style == .box {
+                textField.superview?.layer.borderColor = (text.count > 0 ? self.borderLineColor : self.emptyBorderLineColor).cgColor
+            }
+        }
         let passwordIndex = index - 1
         if password.count > (passwordIndex) {
             // delete if space
@@ -142,6 +189,7 @@ public class SVPinView: UIView {
     
     private func validateAndSendCallback() {
         let pin = getPin()
+        self.didChangeCallback?(pin)
         guard !pin.isEmpty else {return}
         if didFinishCallback != nil {
             didFinishCallback!(pin)
@@ -157,7 +205,33 @@ public class SVPinView: UIView {
         }
     }
     
+    fileprivate func getTextField(forIndex index:Int) -> SVPinField? {
+        if index >= self.collectionView.numberOfItems(inSection: 0) {
+            return nil
+        }
+        
+        return self.collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(101+index) as? SVPinField
+    }
+    
     // MARK: Public methods
+    @objc
+    public func setBorderColor(color:UIColor?=nil) {
+        let cells = self.collectionView?.visibleCells ?? []
+        for (idx, cell) in cells.enumerated() {
+            if let textField = cell.viewWithTag(101+idx) as? SVPinField {
+                var color = color ?? (textField.text!.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 ? self.emptyBorderLineColor : self.borderLineColor)
+                if textField.isFirstResponder && self.activeBorderLineColor != self.borderLineColor {
+                    color = self.activeBorderLineColor
+                }
+                textField.superview?.viewWithTag(50)?.backgroundColor = color
+                if style == .box {
+                    textField.superview?.layer.borderColor = color.cgColor
+                }
+            }
+        }
+    }
+    
+    
     @objc
     public func getPin() -> String {
         
@@ -176,9 +250,10 @@ public class SVPinView: UIView {
         guard !isLoading else {return}
         
         password.removeAll()
-        self.view.removeFromSuperview()
-        isLoading = true
-        loadView()
+        let cells = self.collectionView?.visibleCells ?? []
+        for (idx, cell) in cells.enumerated() {
+            (cell.viewWithTag(101+idx) as? SVPinField)?.text = ""
+        }
     }
     
     @objc
@@ -258,13 +333,13 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
             containerView.layer.borderWidth = 0
             containerView.layer.borderColor = UIColor.clear.cgColor
         case .underline:
-            setupUnderline(color: borderLineColor, withThickness: borderLineThickness)
+            setupUnderline(color: emptyBorderLineColor, withThickness: borderLineThickness)
             containerView.layer.borderWidth = 0
             containerView.layer.borderColor = UIColor.clear.cgColor
         case .box:
             setupUnderline(color: UIColor.clear, withThickness: 0)
             containerView.layer.borderWidth = borderLineThickness
-            containerView.layer.borderColor = borderLineColor.cgColor
+            containerView.layer.borderColor = emptyBorderLineColor.cgColor
         }
         
         // Make the Pin field the first responder
@@ -330,6 +405,14 @@ extension SVPinView : UITextFieldDelegate
             textField.isSecureTextEntry = false
             textField.text =  " "
             placeholderLabel.isHidden = false
+        }
+        self.setBorderColor()
+    }
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        let text = textField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        textField.superview?.viewWithTag(50)?.backgroundColor = text.count == 0 ? self.emptyBorderLineColor : self.borderLineColor
+        if style == .box {
+            textField.superview?.layer.borderColor = (text.count == 0 ? self.emptyBorderLineColor : self.borderLineColor).cgColor
         }
     }
     
