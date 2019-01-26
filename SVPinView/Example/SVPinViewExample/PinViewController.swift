@@ -29,7 +29,7 @@ class PinViewController: UIViewController {
     
     func configurePinView() {
         
-        pinView.pinLength = 6
+        pinView.pinLength = 4
         pinView.secureCharacter = "\u{25CF}"
         pinView.interSpace = 10
         pinView.textColor = UIColor.white
@@ -51,8 +51,8 @@ class PinViewController: UIViewController {
         pinView.pinInputAccessoryView = { () -> UIView in
             let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
             doneToolbar.barStyle = UIBarStyle.default
-            let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-            let done: UIBarButtonItem  = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(dismissKeyboard))
+            let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+            let done: UIBarButtonItem  = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.done, target: self, action: #selector(dismissKeyboard))
             
             var items = [UIBarButtonItem]()
             items.append(flexSpace)
@@ -64,6 +64,9 @@ class PinViewController: UIViewController {
         }()
         
         pinView.didFinishCallback = didFinishEnteringPin(pin:)
+        pinView.didChangeCallback = { pin in
+            print("The entered pin is \(pin)") 
+        }
     }
     
     @objc func dismissKeyboard() {
@@ -126,8 +129,8 @@ class PinViewController: UIViewController {
     
     // MARK: Helper Functions
     func showAlert(title:String, message:String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
