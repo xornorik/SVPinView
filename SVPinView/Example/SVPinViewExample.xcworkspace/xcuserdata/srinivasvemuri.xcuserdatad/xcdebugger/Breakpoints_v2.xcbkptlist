@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Classes/SVPinView.swift"
+            timestampString = "570204688.883473"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "371"
+            endingLineNumber = "371"
+            landmarkName = "textFieldDidBeginEditing(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SVPinView.SVPinView.textFieldDidBeginEditing(__C.UITextField) -&gt; ()"
+                  moduleName = "SVPinView"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/srinivasvemuri/Documents/Srinivas/Libraries/SVPinView/SVPinView/Source/Classes/SVPinView.swift"
+                  timestampString = "570199929.4264621"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "367"
+                  endingLineNumber = "367"
+                  offsetFromSymbolStart = "399">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SVPinView.SVPinView.textFieldDidBeginEditing(__C.UITextField) -&gt; ()"
+                  moduleName = "SVPinView"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/srinivasvemuri/Documents/Srinivas/Libraries/SVPinView/SVPinView/Source/Classes/SVPinView.swift"
+                  timestampString = "570199929.4291379"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "367"
+                  endingLineNumber = "367"
+                  offsetFromSymbolStart = "2400">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
