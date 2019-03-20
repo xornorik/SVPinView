@@ -86,9 +86,7 @@ public class SVPinView: UIView {
         collectionView.register(collectionViewNib, forCellWithReuseIdentifier: reuseIdentifier)
         flowLayout.scrollDirection = .vertical //weird!!!
         collectionView.isScrollEnabled = false
-        
-        password = [String](repeating: "", count: pinLength)
-        
+                
         self.addSubview(view)
         view.frame = bounds
         view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
@@ -150,8 +148,12 @@ public class SVPinView: UIView {
         // store text
         let text =  textField.text ?? ""
         let passwordIndex = index - 1
-        // delete if space
-        password[passwordIndex] = text == " " ? "" : text
+        if password.count > (passwordIndex) {
+            // delete if space
+            password[passwordIndex] = text == " " ? "" : text
+        } else {
+            password.append(text)
+        }
         validateAndSendCallback()
     }
     
@@ -215,7 +217,6 @@ public class SVPinView: UIView {
     public func getPin() -> String {
         
         guard !isLoading else { return "" }
-        print("~~~~\(password)")
         guard password.count == pinLength && password.joined().trimmingCharacters(in: CharacterSet(charactersIn: " ")).count == pinLength else {
             return ""
         }
