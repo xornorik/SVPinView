@@ -286,7 +286,11 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         
         // Setting up textField
         textField.tag = 101 + indexPath.row
-        textField.text = " "
+        if textField.tag != 101 {
+            textField.text = " "
+        } else {
+            textField.text = nil
+        }
         textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
         textField.isSecureTextEntry = false
         textField.textColor = self.textColor
@@ -368,7 +372,9 @@ extension SVPinView : UITextFieldDelegate
         
         if text.count == 0 {
             textField.isSecureTextEntry = false
-            textField.text =  " "
+            if textField.tag != 101 {
+                textField.text = " "
+            }
             placeholderLabel.isHidden = false
         }
         
