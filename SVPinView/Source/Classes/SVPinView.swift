@@ -149,7 +149,7 @@ public class SVPinView: UIView {
         let passwordIndex = index - 1
         if password.count > (passwordIndex) {
             // delete if space
-            password[passwordIndex] = text == " " ? "" : text
+            password[passwordIndex] = text == "" ? "" : text
         } else {
             password.append(text)
         }
@@ -216,7 +216,7 @@ public class SVPinView: UIView {
     public func getPin() -> String {
         
         guard !isLoading else { return "" }
-        guard password.count == pinLength && password.joined().trimmingCharacters(in: CharacterSet(charactersIn: " ")).count == pinLength else {
+        guard password.count == pinLength && password.joined().trimmingCharacters(in: CharacterSet(charactersIn: "")).count == pinLength else {
             return ""
         }
         return password.joined()
@@ -366,7 +366,7 @@ extension SVPinView : UITextFieldDelegate
         
         if text.count == 0 {
             textField.isSecureTextEntry = false
-            textField.text =  " "
+            textField.text =  ""
             placeholderLabel.isHidden = false
         }
         
