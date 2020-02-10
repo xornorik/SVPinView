@@ -136,7 +136,6 @@ public class SVPinView: UIView {
         // secure text after a bit
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
             if textField.text == "" {
-                textField.text = " "
                 placeholderLabel.isHidden = false
                 textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
             } else {
@@ -255,7 +254,6 @@ public class SVPinView: UIView {
             //secure text after a bit
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
                 if textField.text == "" {
-                    textField.text = " "
                     placeholderLabel.isHidden = false
                 } else {
                     if self.shouldSecureText { textField.text = self.secureCharacter } else {}
@@ -286,7 +284,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         
         // Setting up textField
         textField.tag = 101 + indexPath.row
-        textField.text = " "
+        textField.text = ""
         textField.layer.sublayerTransform = CATransform3DMakeTranslation(-4, 0, 0)
         textField.isSecureTextEntry = false
         textField.textColor = self.textColor
