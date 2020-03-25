@@ -10,7 +10,7 @@ import SVPinView
 
 class PinViewController: UIViewController {
     
-    @IBOutlet var pinView:SVPinView!
+    @IBOutlet var pinView: SVPinView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,7 @@ class PinViewController: UIViewController {
     
     func configurePinView() {
         
-        pinView.pinLength = 4
+        pinView.pinLength = 6
         pinView.secureCharacter = "\u{25CF}"
         pinView.interSpace = 10
         pinView.textColor = UIColor.white
@@ -45,6 +45,7 @@ class PinViewController: UIViewController {
         pinView.activeFieldCornerRadius = 15
         pinView.placeholder = "******"
         pinView.becomeFirstResponderAtIndex = 0
+        pinView.shouldDismissKeyboardOnEmptyFirstField = false
         
         pinView.font = UIFont.systemFont(ofSize: 15)
         pinView.keyboardType = .phonePad
@@ -96,7 +97,7 @@ class PinViewController: UIViewController {
     
     @IBAction func toggleStyle() {
         var nextStyle = pinView.style.rawValue + 1
-        if nextStyle == 3 {nextStyle = 0}
+        if nextStyle == 3 { nextStyle = 0 }
         let style = SVPinViewStyle(rawValue: nextStyle)!
         switch style {
         case .none:

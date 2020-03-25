@@ -1,12 +1,10 @@
 # SVPinView
 SVPinView is a light-weight customisable library used for accepting pin numbers or one-time passwords.
 
-<p align="left">
-<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/Swift_4-compatible-4BC51D.svg?style=flat" alt="Swift 4 compatible" /></a>
-<a href="https://cocoapods.org/pods/ScrollableDatepicker"><img src="https://img.shields.io/badge/pod-2.1.0-blue.svg" alt="CocoaPods compatible" /></a>
-<img src="https://img.shields.io/badge/platform-iOS-blue.svg?style=flat" alt="Platform iOS" />
-<a href="https://raw.githubusercontent.com/maxsokolov/tablekit/master/LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License: MIT" /></a>
-</p>
+[![Swift 5.1](https://img.shields.io/badge/Swift-5.1-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/SVPinView.svg)](https://developer.apple.com/swift/)
+[![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](http://www.apple.com/ios/)
+[![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 ![demo](SVPinView/Screenshots/SVPinView.gif)
 
@@ -65,9 +63,9 @@ The `isContentTypeOneTimeCode` property sets the contentType of the first pinFie
 #### Styles
 ```swift
 enum SVPinViewStyle : Int {
-case none = 0
-case underline
-case box
+    case none = 0
+    case underline
+    case box
 }
 ```
 There are two inbuilt styes; `underline` & `box`. However, the *fieldBackgroundColor* & *fieldCornerRadius* properties along with *activeFieldBackgroundColor* & *activeCornerRadius* properties can be used to create custom styles.
@@ -80,20 +78,20 @@ pinView.fieldCornerRadius = 0
 
 - **getPin()**: Returns the entered pin as a String. If the method is called when the pin entry is incomplete, it returns an *empty* String for validation.
 - **pastePin()**: Takes a String as an argument and enters it into the pinView. Useful for showing default values or for pasting from clipboard. Long-press on the pin field will also allow pasting from the clipboard.
-- **clearPin()**: Clears the entered pin.
+- **clearPin()**: Clears the entered pin and also refreshes the view.
 
 ### Callbacks
 
 - **didFinishCallback**: Gets executed after the entire pin has been entered. This is useful when a network call has to be made or for navigating to a different ViewController after the pin has been entered.
 - **didChangeCallback**: Gets executed when any of the pinFields have been changed. This gives additional control to the parent VC - Eg: if a submit button has to be enabled/disabled based on the pin validation. 
 ```swift
-pinView.didFinishCallback = { pin in
-print("The pin entered is \(pin)")
+pinView.didFinishCallback = { [weak self] pin in
+    print("The pin entered is \(pin)")
 }
 ```
 ```swift
-pinView.didChangeCallback = { pin in
-submitButton.isEnabled = isValid(pin)
+pinView.didChangeCallback = { [weak self] pin in
+    submitButton.isEnabled = isValid(pin)
 }
 ```
 

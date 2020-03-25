@@ -20,4 +20,19 @@ class SVPinField: UITextField {
         }
         return super.canPerformAction(action, withSender: sender)
     }
+    
+    override func deleteBackward() {
+        super.deleteBackward()
+        
+        let isBackSpace = { () -> Bool in
+            let char = self.text!.cString(using: String.Encoding.utf8)!
+            return strcmp(char, "\\b") == -92
+        }()
+        
+        if isBackSpace {
+            if let nextResponder = self.superview?.superview?.superview?.superview?.viewWithTag(self.tag - 1) as UIResponder? {
+                nextResponder.becomeFirstResponder()
+            }
+        }
+    }
 }

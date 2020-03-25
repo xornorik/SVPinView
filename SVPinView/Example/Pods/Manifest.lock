@@ -1,5 +1,5 @@
 PODS:
-  - SVPinView (1.0.5)
+  - SVPinView (1.0.7)
 
 DEPENDENCIES:
   - SVPinView (from `../../`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../../"
 
 SPEC CHECKSUMS:
-  SVPinView: 7b64d6ae30abbd46e3654bc876770ed07b074b06
+  SVPinView: 6c1da57e4a1273298802f460c60511ba10f7c831
 
 PODFILE CHECKSUM: b9b57fc0cf7226021a70e6e19e5c127fb3eb5d37
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.3
