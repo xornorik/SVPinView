@@ -37,6 +37,7 @@ public class SVPinView: UIView {
     @IBInspectable public var interSpace: CGFloat = 5
     @IBInspectable public var textColor: UIColor = UIColor.black
     @IBInspectable public var shouldSecureText: Bool = true
+    @IBInspectable public var secureTextDelay: Int = 500
     @IBInspectable public var allowsWhitespaces: Bool = true
     @IBInspectable public var placeholder: String = ""
     
@@ -138,7 +139,7 @@ public class SVPinView: UIView {
         placeholderLabel.isHidden = !(textField.text?.isEmpty ?? true)
         
         // secure text after a bit
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(secureTextDelay), execute: {
             if !(textField.text?.isEmpty ?? true) {
                 placeholderLabel.isHidden = true
                 if self.shouldSecureText { textField.text = self.secureCharacter }
@@ -265,7 +266,7 @@ public class SVPinView: UIView {
             placeholderLabel.isHidden = true
 
             //secure text after a bit
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(secureTextDelay), execute: {
                 if textField.text != "" {
                     if self.shouldSecureText { textField.text = self.secureCharacter } else {}
                 }
@@ -301,7 +302,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         textField.tag = 101 + indexPath.row
         textField.isSecureTextEntry = false
         textField.textColor = self.textColor
-        textField.tintColor = textColor
+        textField.tintColor = self.tintColor
         textField.font = self.font
         if #available(iOS 12.0, *), indexPath.row == 0, isContentTypeOneTimeCode {
             textField.textContentType = .oneTimeCode
