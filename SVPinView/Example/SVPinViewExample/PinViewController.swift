@@ -44,6 +44,9 @@ class PinViewController: UIViewController {
         pinView.fieldCornerRadius = 15
         pinView.activeFieldCornerRadius = 15
         pinView.placeholder = "******"
+        pinView.deleteButtonAction = .deleteCurrentAndMoveToPrevious
+        pinView.keyboardAppearance = .default
+        pinView.tintColor = .white
         pinView.becomeFirstResponderAtIndex = 0
         pinView.shouldDismissKeyboardOnEmptyFirstField = false
         

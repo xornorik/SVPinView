@@ -1,0 +1,11 @@
+framework module SVPinView {
+  umbrella header "SVPinView-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module SVPinView.Swift {
+    header "SVPinView-Swift.h"
+    requires objc
+}

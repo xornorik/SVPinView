@@ -9,10 +9,29 @@
 import UIKit
 
 @objc
-public enum SVPinViewStyle : Int {
+public enum SVPinViewStyle: Int {
     case none = 0
     case underline
     case box
+}
+
+@objc
+public enum SVPinViewDeleteButtonAction: Int {
+    /// Deletes the contents of the current field and moves the cursor to the previous field.
+    case deleteCurrentAndMoveToPrevious = 0
+    
+    /// Simply deletes the content of the current field without moving the cursor.
+    /// If there is no value in the field, the cursor moves to the previous field.
+    case deleteCurrent
+    
+    /// Moves the cursor to the previous field and delets the contents.
+    /// When any field is focused, its contents are deleted.
+    case moveToPreviousAndDelete
+}
+
+private class SVPinViewFlowLayout: UICollectionViewFlowLayout {
+    override var developmentLayoutDirection: UIUserInterfaceLayoutDirection { return .leftToRight }
+    override var flipsHorizontallyInOppositeLayoutDirection: Bool { return true }
 }
 
 @objc
@@ -23,6 +42,7 @@ public class SVPinView: UIView {
     @IBOutlet fileprivate var errorView: UIView!
     
     fileprivate var flowLayout: UICollectionViewFlowLayout {
+        self.collectionView.collectionViewLayout = SVPinViewFlowLayout()
         return self.collectionView?.collectionViewLayout as! UICollectionViewFlowLayout
     }
     
@@ -37,6 +57,7 @@ public class SVPinView: UIView {
     @IBInspectable public var interSpace: CGFloat = 5
     @IBInspectable public var textColor: UIColor = UIColor.black
     @IBInspectable public var shouldSecureText: Bool = true
+    @IBInspectable public var secureTextDelay: Int = 500
     @IBInspectable public var allowsWhitespaces: Bool = true
     @IBInspectable public var placeholder: String = ""
     
@@ -53,9 +74,11 @@ public class SVPinView: UIView {
     @IBInspectable public var activeFieldCornerRadius: CGFloat = 0
     
     public var style: SVPinViewStyle = .underline
+    public var deleteButtonAction: SVPinViewDeleteButtonAction = .deleteCurrentAndMoveToPrevious
     
     public var font: UIFont = UIFont.systemFont(ofSize: 15)
     public var keyboardType: UIKeyboardType = UIKeyboardType.phonePad
+    public var keyboardAppearance: UIKeyboardAppearance = .default
     public var becomeFirstResponderAtIndex: Int? = nil
     public var isContentTypeOneTimeCode: Bool = true
     public var shouldDismissKeyboardOnEmptyFirstField: Bool = false
@@ -77,7 +100,7 @@ public class SVPinView: UIView {
         loadView()
     }
     
-    private func loadView() {
+    private func loadView(completionHandler: (()->())? = nil) {
         let podBundle = Bundle(for: SVPinView.self)
         let nib = UINib(nibName: "SVPinView", bundle: podBundle)
         view = nib.instantiate(withOwner: self, options: nil)[0] as? UIView
@@ -91,6 +114,7 @@ public class SVPinView: UIView {
         self.addSubview(view)
         view.frame = bounds
         view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
+        completionHandler?()
     }
     
     // MARK: - Private methods -
@@ -98,7 +122,7 @@ public class SVPinView: UIView {
         var nextTag = textField.tag
         let index = nextTag - 100
         guard let placeholderLabel = textField.superview?.viewWithTag(400) as? UILabel else {
-            showPinError(error: "ERR-101: Type Mismatch - Line 100")
+            showPinError(error: "ERR-101: Type Mismatch")
             return
         }
         
@@ -120,8 +144,9 @@ public class SVPinView: UIView {
             return
         }
         
-        // check if entered text is a backspace
-        nextTag = isBackSpace() ? textField.tag - 1 : textField.tag + 1
+        // if entered text is a backspace - do nothing; else - move to next field
+        // backspace logic handled in SVPinField
+        nextTag = isBackSpace() ? textField.tag : textField.tag + 1
         
         // Try to find next responder
         if let nextResponder = textField.superview?.superview?.superview?.superview?.viewWithTag(nextTag) as UIResponder? {
@@ -138,7 +163,7 @@ public class SVPinView: UIView {
         placeholderLabel.isHidden = !(textField.text?.isEmpty ?? true)
         
         // secure text after a bit
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(secureTextDelay), execute: {
             if !(textField.text?.isEmpty ?? true) {
                 placeholderLabel.isHidden = true
                 if self.shouldSecureText { textField.text = self.secureCharacter }
@@ -171,7 +196,7 @@ public class SVPinView: UIView {
             
             if let placeholderLabel = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(400) as? UILabel {
                 placeholderLabel.text = String(char)
-            } else { showPinError(error: "ERR-102: Type Mismatch - Line 172") }
+            } else { showPinError(error: "ERR-102: Type Mismatch") }
         }
     }
     
@@ -202,12 +227,12 @@ public class SVPinView: UIView {
         }
      }
     
-    @IBAction fileprivate func refreshPinView() {
+    @IBAction fileprivate func refreshPinView(completionHandler: (()->())? = nil) {
         view.removeFromSuperview()
         view = nil
         isLoading = true
         errorView.isHidden = true
-        loadView()
+        loadView(completionHandler: completionHandler)
     }
     
     fileprivate func showPinError(error: String) {
@@ -220,7 +245,6 @@ public class SVPinView: UIView {
     // MARK: - Public methods -
     
     /// Returns the entered PIN; returns empty string if incomplete
-    ///
     /// - Returns: The entered PIN.
     @objc
     public func getPin() -> String {
@@ -231,33 +255,41 @@ public class SVPinView: UIView {
         }
         return password.joined()
     }
-    
-    /// Clears the entered PIN
+        
+    /// Clears the entered PIN and refreshes the view
+    /// - Parameter completionHandler: Called after the pin is cleared the view is re-rendered.
     @objc
-    public func clearPin() {
+    public func clearPin(completionHandler: (()->())? = nil) {
         
         guard !isLoading else { return }
         
         password.removeAll()
-        refreshPinView()
+        refreshPinView(completionHandler: completionHandler)
+    }
+    
+    /// Clears the entered PIN and refreshes the view.
+    /// (internally calls the clearPin method; re-declared since the name is more intuitive)
+    /// - Parameter completionHandler: Called after the pin is cleared the view is re-rendered.
+    @objc
+    public func refreshView(completionHandler: (()->())? = nil) {
+        clearPin(completionHandler: completionHandler)
     }
     
     /// Pastes the PIN onto the PinView
-    ///
     /// - Parameter pin: The pin which is to be entered onto the PinView.
     @objc
-    public func pastePin(pin:String) {
+    public func pastePin(pin: String) {
         
         password = []
         for (index,char) in pin.enumerated() {
 
             guard index < pinLength else { return }
 
-            //Get the first textField
+            // Get the first textField
             guard let textField = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(101 + index) as? SVPinField,
                 let placeholderLabel = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(400) as? UILabel
             else {
-                showPinError(error: "ERR-103: Type Mismatch - Line 257")
+                showPinError(error: "ERR-103: Type Mismatch")
                 return
             }
 
@@ -265,7 +297,7 @@ public class SVPinView: UIView {
             placeholderLabel.isHidden = true
 
             //secure text after a bit
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(secureTextDelay), execute: {
                 if textField.text != "" {
                     if self.shouldSecureText { textField.text = self.secureCharacter } else {}
                 }
@@ -293,7 +325,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
             let underLine = cell.viewWithTag(50),
             let placeholderLabel = cell.viewWithTag(400) as? UILabel
         else {
-            showPinError(error: "ERR-104: Tag Mismatch - Line 291")
+            showPinError(error: "ERR-104: Tag Mismatch")
             return UICollectionViewCell()
         }
         
@@ -301,12 +333,14 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         textField.tag = 101 + indexPath.row
         textField.isSecureTextEntry = false
         textField.textColor = self.textColor
-        textField.tintColor = textColor
+        textField.tintColor = self.tintColor
         textField.font = self.font
+        textField.deleteButtonAction = self.deleteButtonAction
         if #available(iOS 12.0, *), indexPath.row == 0, isContentTypeOneTimeCode {
             textField.textContentType = .oneTimeCode
         }
         textField.keyboardType = self.keyboardType
+        textField.keyboardAppearance = self.keyboardAppearance
         textField.inputAccessoryView = self.pinInputAccessoryView
         
         textField.delegate = self
@@ -380,20 +414,28 @@ extension SVPinView : UITextFieldDelegate
             if text.count == 0 {
                 textField.isSecureTextEntry = false
                 placeholderLabel.isHidden = false
+            } else if deleteButtonAction == .moveToPreviousAndDelete {
+                textField.text = ""
+                let passwordIndex = (textField.tag - 100) - 1
+                if password.count > (passwordIndex) {
+                    password[passwordIndex] = ""
+                    textField.isSecureTextEntry = false
+                    placeholderLabel.isHidden = false
+                }
             }
-        } else { showPinError(error: "ERR-105: Type Mismatch - Line 377") }
+        } else { showPinError(error: "ERR-105: Type Mismatch") }
         
         if let containerView = textField.superview?.viewWithTag(51),
         let underLine = textField.superview?.viewWithTag(50) {
             self.stylePinField(containerView: containerView, underLine: underLine, isActive: true)
-        } else { showPinError(error: "ERR-106: Type Mismatch - Line 387") }
+        } else { showPinError(error: "ERR-106: Type Mismatch") }
     }
     
     public func textFieldDidEndEditing(_ textField: UITextField) {
         if let containerView = textField.superview?.viewWithTag(51),
         let underLine = textField.superview?.viewWithTag(50) {
             self.stylePinField(containerView: containerView, underLine: underLine, isActive: false)
-        } else { showPinError(error: "ERR-107: Type Mismatch - Line 394") }
+        } else { showPinError(error: "ERR-107: Type Mismatch") }
     }
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -401,6 +443,11 @@ extension SVPinView : UITextFieldDelegate
             textField.resignFirstResponder()
             DispatchQueue.main.async { self.pastePin(pin: string) }
             return false
+        } else if let cursorLocation = textField.position(from: textField.beginningOfDocument, offset: (range.location + string.count)),
+            cursorLocation == textField.endOfDocument {
+            // If the user moves the cursor to the beginning of the field, move it to the end before textEntry,
+            // so the oldest digit is removed in textFieldDidChange: to ensure single character entry
+            textField.selectedTextRange = textField.textRange(from: cursorLocation, to: textField.beginningOfDocument)
         }
         return true
     }
