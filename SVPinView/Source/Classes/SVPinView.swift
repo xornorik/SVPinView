@@ -114,7 +114,10 @@ public class SVPinView: UIView {
         self.addSubview(view)
         view.frame = bounds
         view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
-        completionHandler?()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            completionHandler?()
+        }
     }
     
     // MARK: - Private methods -

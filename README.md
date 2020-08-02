@@ -108,9 +108,10 @@ This deletes the contents of the current field when it is focused. When the dele
 
 ### Methods
 
-- **getPin()**: Returns the entered pin as a String. If the method is called when the pin entry is incomplete, it returns an *empty* String for validation.
-- **pastePin()**: Takes a String as an argument and enters it into the pinView. Useful for showing default values or for pasting from clipboard. Long-press on the pin field will also allow pasting from the clipboard.
-- **clearPin()**: Clears the entered pin and also refreshes the view.
+- **getPin**: Returns the entered pin as a String. If the method is called when the pin entry is incomplete, it returns an *empty* String for validation.
+- **pastePin**: Takes a String as an argument and enters it into the pinView. Useful for showing default values or for pasting from clipboard. Long-press on the pin field will also allow pasting from the clipboard.
+- **clearPin**: Clears the entered pin and also refreshes the view. Returns a completion handler for when the view is refreshed. 
+- **refreshView**: Clears the entered pin and refreshes the view. Returns a completion handler for when the view is refreshed. 
 
 ### Callbacks
 
