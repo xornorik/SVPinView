@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ACC5DC0020469FEB00FA8CD7 /* SVPinView.gif in Resources */ = {isa = PBXBuildFile; fileRef = ACC5DBFF20469FEB00FA8CD7 /* SVPinView.gif */; };
-		ACC5DC042046A2A400FA8CD7 /* IBInspectables.png in Resources */ = {isa = PBXBuildFile; fileRef = ACC5DC032046A2A400FA8CD7 /* IBInspectables.png */; };
 		ACE199C3204556340041203C /* SVPinView.h in Headers */ = {isa = PBXBuildFile; fileRef = ACE199C1204556340041203C /* SVPinView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ACE199CC2045566E0041203C /* SVPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE199CA2045566E0041203C /* SVPinView.swift */; };
 		B31AAF972089E8D4004F5BE4 /* SVPinField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31AAF962089E8D4004F5BE4 /* SVPinField.swift */; };
@@ -187,8 +185,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACC5DC042046A2A400FA8CD7 /* IBInspectables.png in Resources */,
-				ACC5DC0020469FEB00FA8CD7 /* SVPinView.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
