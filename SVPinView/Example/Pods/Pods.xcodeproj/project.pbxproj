@@ -527,6 +527,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EB33B6C2520EA362CB707CEAD21F64A6 /* SVPinView.debug.xcconfig */;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -558,6 +559,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A510FB6A862BE394F4D3F6BF736831F /* SVPinView.release.xcconfig */;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
