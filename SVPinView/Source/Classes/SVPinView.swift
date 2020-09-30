@@ -34,7 +34,7 @@ private class SVPinViewFlowLayout: UICollectionViewFlowLayout {
     override var flipsHorizontallyInOppositeLayoutDirection: Bool { return true }
 }
 
-@objc
+@objcMembers
 public class SVPinView: UIView {
     
     // MARK: - Private Properties -
@@ -442,7 +442,7 @@ extension SVPinView : UITextFieldDelegate
     }
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if (string == UIPasteboard.general.string) || (isContentTypeOneTimeCode && string.count >= pinLength) {
+        if (string.count >= pinLength) && (string == UIPasteboard.general.string || isContentTypeOneTimeCode) {
             textField.resignFirstResponder()
             DispatchQueue.main.async { self.pastePin(pin: string) }
             return false

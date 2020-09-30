@@ -123,6 +123,7 @@ class PinViewController: UIViewController {
             pinView.fieldCornerRadius = 0
             pinView.activeFieldCornerRadius = 0
             pinView.style = style
+        @unknown default: break
         }
         clearPin()
     }
