@@ -1,5 +1,5 @@
 framework module SVPinView {
-  umbrella header "SVPinView-umbrella.h"
+  umbrella header "SVPinView.h"
 
   export *
   module * { export * }

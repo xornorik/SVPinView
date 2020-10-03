@@ -106,7 +106,7 @@ public class SVPinView: UIView {
         view = nib.instantiate(withOwner: self, options: nil)[0] as? UIView
         
         // for CollectionView
-        let collectionViewNib = UINib(nibName: "SVPinCell", bundle:podBundle)
+        let collectionViewNib = UINib(nibName: "SVPinCell", bundle: podBundle)
         collectionView.register(collectionViewNib, forCellWithReuseIdentifier: reuseIdentifier)
         flowLayout.scrollDirection = .vertical
         collectionView.isScrollEnabled = false

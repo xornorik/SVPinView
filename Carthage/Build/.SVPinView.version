@@ -8,13 +8,13 @@
   "tvOS" : [
 
   ],
-  "commitish" : "f623608fd6b7dbf8ddb12737383f24b86c8bae03",
+  "commitish" : "1.0.10",
   "iOS" : [
     {
-      "hash" : "3c82b0cb7af703923daf3ea73c32e07f7972fee38af68a4b72f7846129969291",
+      "hash" : "88b10927f167f1e0914aa5714b1da03719681c737270346b08b72720550f5fcc",
       "name" : "SVPinView",
       "linking" : "dynamic",
-      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+      "swiftToolchainVersion" : "5.3 (swiftlang-1200.0.29.2 clang-1200.0.30.1)"
     }
   ]
 }
