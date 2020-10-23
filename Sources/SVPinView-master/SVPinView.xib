@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SVPinView" customModuleProvider="target">
+            <connections>
+                <outlet property="collectionView" destination="RCS-bi-tRO" id="M5R-wh-hrA"/>
+                <outlet property="errorView" destination="j1w-AD-uhD" id="4Cp-eZ-BPa"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="368" height="87"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" semanticContentAttribute="forceLeftToRight" dataMode="none" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RCS-bi-tRO">
+                    <rect key="frame" x="0.0" y="0.0" width="368" height="87"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <inset key="scrollIndicatorInsets" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="A6x-6k-xNz">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="NS6-Zh-cAe"/>
+                        <outlet property="delegate" destination="-1" id="D4D-Zc-ov5"/>
+                    </connections>
+                </collectionView>
+                <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j1w-AD-uhD" userLabel="Error View">
+                    <rect key="frame" x="0.0" y="0.0" width="368" height="87"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vop-Jq-zut">
+                            <rect key="frame" x="0.0" y="0.0" width="368" height="87"/>
+                            <string key="text">⚠ ERROR: Please check the console for details. 
+Retry?</string>
+                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                            <color key="textColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HLL-km-Lja" userLabel="Refresh Button">
+                            <rect key="frame" x="0.0" y="0.0" width="368" height="87"/>
+                            <connections>
+                                <action selector="refreshPinView" destination="-1" eventType="touchUpInside" id="Xxy-7O-pgc"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="HLL-km-Lja" secondAttribute="bottom" id="1Mc-ws-6nl"/>
+                        <constraint firstAttribute="trailing" secondItem="HLL-km-Lja" secondAttribute="trailing" id="9tc-jE-dYD"/>
+                        <constraint firstItem="HLL-km-Lja" firstAttribute="top" secondItem="j1w-AD-uhD" secondAttribute="top" id="HSK-gi-5ag"/>
+                        <constraint firstAttribute="trailing" secondItem="vop-Jq-zut" secondAttribute="trailing" id="XLt-R6-kl7"/>
+                        <constraint firstAttribute="bottom" secondItem="vop-Jq-zut" secondAttribute="bottom" id="aDC-Y1-Zsx"/>
+                        <constraint firstItem="vop-Jq-zut" firstAttribute="leading" secondItem="j1w-AD-uhD" secondAttribute="leading" id="cQN-jY-pTu"/>
+                        <constraint firstItem="vop-Jq-zut" firstAttribute="top" secondItem="j1w-AD-uhD" secondAttribute="top" id="cmi-0n-PC7"/>
+                        <constraint firstItem="HLL-km-Lja" firstAttribute="leading" secondItem="j1w-AD-uhD" secondAttribute="leading" id="uRh-Ks-hbA"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="RCS-bi-tRO" secondAttribute="trailing" id="36f-dQ-fOs"/>
+                <constraint firstItem="j1w-AD-uhD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Rn1-I8-Njf"/>
+                <constraint firstItem="RCS-bi-tRO" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="SwE-dO-oSI"/>
+                <constraint firstItem="RCS-bi-tRO" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="VG1-HH-1d4"/>
+                <constraint firstAttribute="bottom" secondItem="RCS-bi-tRO" secondAttribute="bottom" id="lOs-X5-BPw"/>
+                <constraint firstAttribute="trailing" secondItem="j1w-AD-uhD" secondAttribute="trailing" id="nLf-nY-tSU"/>
+                <constraint firstItem="j1w-AD-uhD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="oB4-J2-IFl"/>
+                <constraint firstAttribute="bottom" secondItem="j1w-AD-uhD" secondAttribute="bottom" id="vIf-gx-I5N"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="30" y="-218.5"/>
+        </view>
+    </objects>
+</document>
