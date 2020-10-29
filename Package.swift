@@ -20,9 +20,9 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SVPinView",
-            path: "SVPinView/Source/Classes",
+            path: "SVPinView/Source",
             resources: [
-                .process("SVPinView/Source/XIB's")
+                .process("XIB's")
             ]),
     ]
 )
