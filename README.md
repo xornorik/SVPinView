@@ -4,6 +4,7 @@ SVPinView is a light-weight customisable library used for accepting pin numbers 
 [![Swift 5.1](https://img.shields.io/badge/Swift-5.1-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/SVPinView.svg)](https://developer.apple.com/swift/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Swift PM compatible](https://img.shields.io/badge/SwiftPM-compatible-4BC51D.svg?style=flat)](https://swift.org/package-manager/)
 [![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](http://www.apple.com/ios/)
 [![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
 
@@ -41,6 +42,20 @@ github xornorik/SVPinView
 - Drag and drop SVPinView.framework from /Carthage/Build/iOS/ to Linked frameworks and libraries in Xcode (Project>Target>General>Linked frameworks and libraries)
 - Add new run script (Project>Target>Build Phases>+> New run script phase) /usr/local/bin/carthage copy-frameworks
 - Add Input files $(SRCROOT)/Carthage/Build/iOS/SVPinView.framework
+
+### Swift Package Manager
+Add SVPinView as dependency in your `Package.swift`
+
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "YourPackage",
+    dependencies: [
+        .Package(url: "https://github.com/jvigneshcs/SVPinView.git", majorVersion: 1),
+    ]
+)
+```
 
 ### Manual
 
