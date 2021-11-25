@@ -60,6 +60,7 @@ public class SVPinView: UIView {
     @IBInspectable public var secureTextDelay: Int = 500
     @IBInspectable public var allowsWhitespaces: Bool = true
     @IBInspectable public var placeholder: String = ""
+    @IBInspectable public var placeholderTextColor: UIColor?
     
     @IBInspectable public var borderLineColor: UIColor = UIColor.black
     @IBInspectable public var activeBorderLineColor: UIColor = UIColor.black
@@ -350,7 +351,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         placeholderLabel.text = ""
-        placeholderLabel.textColor = self.textColor.withAlphaComponent(0.5)
+        placeholderLabel.textColor = self.placeholderTextColor ?? self.textColor.withAlphaComponent(0.5)
         
         stylePinField(containerView: containerView, underLine: underLine, isActive: false)
         
