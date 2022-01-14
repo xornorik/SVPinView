@@ -55,7 +55,17 @@ public class SVPinView: UIView {
     @IBInspectable public var pinLength: Int = 5
     @IBInspectable public var secureCharacter: String = "\u{25CF}"
     @IBInspectable public var interSpace: CGFloat = 5
-    @IBInspectable public var textColor: UIColor = UIColor.black
+    @IBInspectable public var textColor: UIColor = UIColor.black {
+        didSet {
+            for index in 0..<pinLength {
+                guard let textField = collectionView.cellForItem(at: IndexPath(item: index, section: 0))?.viewWithTag(101 + index) as? SVPinField
+                else {
+                    return
+                }
+                textField.textColor = textColor
+            }
+        }
+    }
     @IBInspectable public var shouldSecureText: Bool = true
     @IBInspectable public var secureTextDelay: Int = 500
     @IBInspectable public var allowsWhitespaces: Bool = true
