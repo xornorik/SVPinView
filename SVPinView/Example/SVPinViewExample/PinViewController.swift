@@ -33,9 +33,11 @@ class PinViewController: UIViewController {
         pinView.secureCharacter = "\u{25CF}"
         pinView.interSpace = 10
         pinView.textColor = UIColor.white
-        pinView.borderLineColor = UIColor.white
+        pinView.borderLineColor = UIColor.green
+        pinView.borderLineColorWithText = UIColor.yellow
         pinView.activeBorderLineColor = UIColor.white
         pinView.borderLineThickness = 1
+        pinView.borderLineThicknessWithText = 2
         pinView.shouldSecureText = true
         pinView.allowsWhitespaces = false
         pinView.style = .none
