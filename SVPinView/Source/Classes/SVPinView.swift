@@ -232,11 +232,11 @@ public class SVPinView: UIView {
             } else {
                 setupUnderline(color: borderLineColor, withThickness: borderLineThickness)
             }
-            setupUnderline(color: UIColor.clear, withThickness: 0)
+            setupContainerView(color: UIColor.clear, withThickness: 0)
         case .box:
             setupUnderline(color: UIColor.clear, withThickness: 0)
             if isActive {
-                setupUnderline(color: activeBorderLineColor, withThickness: activeBorderLineThickness)
+                setupContainerView(color: activeBorderLineColor, withThickness: activeBorderLineThickness)
             } else if withText {
                 setupUnderline(color: borderLineColorWithText, withThickness: borderLineThicknessWithText)
             } else {
