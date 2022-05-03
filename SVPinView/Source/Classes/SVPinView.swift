@@ -238,9 +238,9 @@ public class SVPinView: UIView {
             if isActive {
                 setupContainerView(color: activeBorderLineColor, withThickness: activeBorderLineThickness)
             } else if withText {
-                setupUnderline(color: borderLineColorWithText, withThickness: borderLineThicknessWithText)
+                setupContainerView(color: borderLineColorWithText, withThickness: borderLineThicknessWithText)
             } else {
-                setupUnderline(color: borderLineColor, withThickness: borderLineThickness)
+                setupContainerView(color: borderLineColor, withThickness: borderLineThickness)
             }
         }
      }
