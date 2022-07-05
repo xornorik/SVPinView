@@ -82,6 +82,8 @@ public class SVPinView: UIView {
     public var becomeFirstResponderAtIndex: Int? = nil
     public var isContentTypeOneTimeCode: Bool = true
     public var shouldDismissKeyboardOnEmptyFirstField: Bool = false
+    public var shouldUppercase: Bool = false
+    
     public var pinInputAccessoryView: UIView? {
         didSet { refreshPinView() }
     }
@@ -245,6 +247,11 @@ public class SVPinView: UIView {
         print("-----------------------------------")
     }
     
+    public func setAllUppercased() {
+        self.shouldUppercase = true
+        collectionView.reloadData()
+    }
+    
     // MARK: - Public methods -
     
     /// Returns the entered PIN; returns empty string if incomplete
@@ -339,6 +346,7 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
         textField.tintColor = self.tintColor
         textField.font = self.font
         textField.deleteButtonAction = self.deleteButtonAction
+        textField.isAllUppercased = shouldUppercase
         if #available(iOS 12.0, *), indexPath.row == 0, isContentTypeOneTimeCode {
             textField.textContentType = .oneTimeCode
         }

@@ -9,6 +9,17 @@
 import UIKit
 
 class SVPinField: UITextField {
+    
+    var isAllUppercased: Bool = false {
+        didSet {
+            if isAllUppercased {
+                self.autocapitalizationType = .allCharacters
+            } else {
+                self.autocapitalizationType = .none
+            }
+        }
+    }
+    
     var deleteButtonAction: SVPinViewDeleteButtonAction = .deleteCurrentAndMoveToPrevious
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(UIResponderStandardEditActions.copy(_:)) ||
