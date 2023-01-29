@@ -89,6 +89,8 @@ public class SVPinView: UIView {
     public var didFinishCallback: ((String)->())?
     public var didChangeCallback: ((String)->())?
     
+    public var forceLeftToRight: Bool = false
+
     // MARK: - Init methods -
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -404,6 +406,9 @@ extension SVPinView : UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     public override func layoutSubviews() {
         flowLayout.invalidateLayout()
+        if forceLeftToRight {
+            collectionView.semanticContentAttribute = .forceLeftToRight
+        }
     }
 }
 // MARK: - TextField Methods -
